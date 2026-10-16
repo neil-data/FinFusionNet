@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finfusionnet"
+version = "0.1.0"
+description = "Multimodal Financial Market Prediction Framework"
+authors = [{ name = "Neil" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "xgboost",
+    "torch",
+    "pyyaml",
+    "tqdm",
+    "requests",
+    "python-dotenv"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
