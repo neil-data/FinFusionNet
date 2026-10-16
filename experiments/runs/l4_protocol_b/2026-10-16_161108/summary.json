@@ -1,0 +1,33 @@
+{
+  "experiment_id": "L4",
+  "model_type": "LSTM",
+  "description": "Technical + market context + news availability + VADER",
+  "protocol": "protocol_b",
+  "news_days_only": false,
+  "sequence_length": 20,
+  "hidden_dim": 64,
+  "num_layers": 2,
+  "execution_timestamp": "2026-10-16_161108",
+  "n_folds": 45,
+  "total_test_predictions": 9132,
+  "unique_test_dates": 915,
+  "primary_metric_equal_weighted_date_accuracy": 0.5018579234972678,
+  "pooled_accuracy": 0.5008760402978537,
+  "pooled_f1": 0.6218682594989215,
+  "pooled_roc_auc": 0.5009611032937209,
+  "pooled_log_loss": 0.6949355602264404,
+  "baseline_always_up_accuracy": 0.4966053438458169,
+  "baseline_previous_direction_accuracy": 0.4885019710906702,
+  "lift_over_always_up": 0.004270696452036815,
+  "lift_over_previous_direction": 0.012374069207183536,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}

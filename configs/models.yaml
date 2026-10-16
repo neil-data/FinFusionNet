@@ -56,3 +56,59 @@ experiments:
       - "group_c_news_availability"
       - "group_d_vader"
       - "group_e_finbert"
+
+# -------------------------------------------------------------
+# LSTM Research Track Configuration
+# -------------------------------------------------------------
+lstm:
+  sequence_length: 20
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.20
+  dense_dim: 32
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  batch_size: 64
+  max_epochs: 30
+  early_stopping_patience: 5
+  random_state: 42
+  prediction_threshold: 0.50
+
+lstm_experiments:
+  L1:
+    description: "Technical-only sequential baseline"
+    groups:
+      - "group_a_technical"
+  L2:
+    description: "Technical + market context"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+  L3:
+    description: "Technical + market context + news availability control"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+      - "group_c_news_availability"
+  L4:
+    description: "Technical + market context + news availability + VADER"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+      - "group_c_news_availability"
+      - "group_d_vader"
+  L5:
+    description: "Technical + market context + news availability + FinBERT"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+      - "group_c_news_availability"
+      - "group_e_finbert"
+  L6:
+    description: "Technical + market context + news availability + VADER + FinBERT"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+      - "group_c_news_availability"
+      - "group_d_vader"
+      - "group_e_finbert"

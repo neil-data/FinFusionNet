@@ -1,0 +1,33 @@
+{
+  "experiment_id": "L6",
+  "model_type": "LSTM",
+  "description": "Technical + market context + news availability + VADER + FinBERT",
+  "protocol": "protocol_b",
+  "news_days_only": false,
+  "sequence_length": 20,
+  "hidden_dim": 64,
+  "num_layers": 2,
+  "execution_timestamp": "2026-10-16_203041",
+  "n_folds": 45,
+  "total_test_predictions": 9132,
+  "unique_test_dates": 915,
+  "primary_metric_equal_weighted_date_accuracy": 0.492568306010929,
+  "pooled_accuracy": 0.49156811213315815,
+  "pooled_f1": 0.5948163015969979,
+  "pooled_roc_auc": 0.49239648406911274,
+  "pooled_log_loss": 0.6961265206336975,
+  "baseline_always_up_accuracy": 0.4966053438458169,
+  "baseline_previous_direction_accuracy": 0.4885019710906702,
+  "lift_over_always_up": -0.005037231712658741,
+  "lift_over_previous_direction": 0.00306614104248798,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}
