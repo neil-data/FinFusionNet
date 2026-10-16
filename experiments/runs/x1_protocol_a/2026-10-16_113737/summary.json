@@ -1,0 +1,29 @@
+{
+  "experiment_id": "X1",
+  "description": "Technical-only baseline",
+  "protocol": "protocol_a",
+  "news_days_only": false,
+  "execution_timestamp": "2026-10-16_113737",
+  "n_folds": 34,
+  "total_test_predictions": 5100,
+  "unique_test_dates": 1410,
+  "primary_metric_equal_weighted_date_accuracy": 0.5176004728132387,
+  "pooled_accuracy": 0.5172549019607843,
+  "pooled_f1": 0.5340651021953066,
+  "pooled_roc_auc": 0.5181789408800327,
+  "pooled_log_loss": 0.8086543679237366,
+  "baseline_always_up_accuracy": 0.5027450980392156,
+  "baseline_previous_direction_accuracy": 0.49117647058823527,
+  "lift_over_always_up": 0.014509803921568643,
+  "lift_over_previous_direction": 0.026078431372549005,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}

@@ -1,1 +1,29 @@
-# Dataset configuration
+# FinFusionNet Dataset Configuration
+
+horizons:
+  warmup_start: "2020-01-01"
+  warmup_end: "2020-12-31"
+  modeling_start: "2021-01-01"
+  modeling_end: "2026-09-30"
+  freeze_date: "2026-09-30"
+  min_history_sessions: 50
+
+exchange:
+  name: "NSE"
+  mic: "XNSE"
+  market_close_ist: "15:30"
+  timezone: "Asia/Kolkata"
+
+market_index:
+  ticker: "^NSEI"
+  name: "NIFTY 50"
+
+paths:
+  raw_prices_dir: "data/raw/prices"
+  interim_prices_dir: "data/interim/prices"
+  interim_news_dir: "data/interim/news"
+  aligned_data_dir: "data/interim/aligned_data"
+  processed_ticker_day_dir: "data/processed/ticker_day"
+  master_dataset_dir: "data/processed/master_dataset"
+  model_ready_dir: "data/processed/model_ready"
+  metadata_dir: "data/metadata"

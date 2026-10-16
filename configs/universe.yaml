@@ -1,1 +1,88 @@
-# Universe configuration
+# FinFusionNet Universe Configuration
+# Point-in-time dynamic NIFTY 50 constituents (2020 - 2026)
+
+benchmark_symbol: "^NSEI"
+survivorship_bias_protection: true
+
+# In-window constituent changes (effective date = first trading day of new status)
+rebalances:
+  - effective_date: "2021-03-31"
+    in: ["TATACONSUM"]
+    out: ["GAIL"]
+  - effective_date: "2022-03-31"
+    in: ["APOLLOHOSP"]
+    out: ["IOC"]
+  - effective_date: "2022-09-30"
+    in: ["ADANIENT"]
+    out: ["SHREECEM"]
+  - effective_date: "2023-07-13"
+    in: ["LTIM"]
+    out: ["HDFC"]
+  - effective_date: "2024-03-28"
+    in: ["SHRIRAMFIN"]
+    out: ["UPL"]
+  - effective_date: "2024-09-30"
+    in: ["BEL", "TRENT"]
+    out: ["DIVISLAB", "LTIM"]
+  - effective_date: "2025-03-28"
+    in: ["JIOFIN", "ETERNAL"]
+    out: ["BPCL", "BRITANNIA"]
+  - effective_date: "2025-09-30"
+    in: ["INDIGO", "MAXHEALTH"]
+    out: ["HEROMOTOCO", "INDUSINDBK"]
+  - effective_date: "2026-09-30"
+    in: ["BSE"]
+    out: ["WIPRO"]
+
+# Base constituents as of 2021-01-01 (prior to 2021-03-31 rebalance)
+base_constituents_2021:
+  - "ADANIPORTS"
+  - "ASIANPAINT"
+  - "AXISBANK"
+  - "BAJAJ-AUTO"
+  - "BAJFINANCE"
+  - "BAJAJFINSV"
+  - "BPCL"
+  - "BHARTIARTL"
+  - "BRITANNIA"
+  - "CIPLA"
+  - "COALINDIA"
+  - "DIVISLAB"
+  - "DRREDDY"
+  - "EICHERMOT"
+  - "GAIL"
+  - "GRASIM"
+  - "HCLTECH"
+  - "HDFC"
+  - "HDFCBANK"
+  - "HDFCLIFE"
+  - "HEROMOTOCO"
+  - "HINDALCO"
+  - "HINDUNILVR"
+  - "ICICIBANK"
+  - "ITC"
+  - "IOC"
+  - "INDUSINDBK"
+  - "INFY"
+  - "JSWSTEEL"
+  - "KOTAKBANK"
+  - "LT"
+  - "M&M"
+  - "MARUTI"
+  - "NTPC"
+  - "NESTLEIND"
+  - "ONGC"
+  - "POWERGRID"
+  - "RELIANCE"
+  - "SBILIFE"
+  - "SHREECEM"
+  - "SBIN"
+  - "SUNPHARMA"
+  - "TCS"
+  - "TATAMOTORS"
+  - "TATASTEEL"
+  - "TECHM"
+  - "TITAN"
+  - "UPL"
+  - "ULTRACEMCO"
+  - "WIPRO"

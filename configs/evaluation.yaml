@@ -1,1 +1,57 @@
-# Evaluation configuration
+# FinFusionNet Evaluation Configuration
+
+protocols:
+  protocol_a:
+    name: "historical_rolling_benchmark"
+    train_sessions: 46
+    test_sessions: 15
+    step_sessions: 17
+    expected_original_folds: 34
+    early_stopping: false
+    n_estimators: 500
+
+  protocol_b:
+    name: "expanding_monthly_window"
+    initial_train_months: 24
+    test_period_months: 1
+    step_months: 1
+    expand_training_data: true
+    early_stopping: true
+    validation_fraction: 0.15
+    minimum_validation_sessions: 60
+    early_stopping_rounds: 50
+    early_stopping_metric: "logloss"
+    target_date_purging: true
+
+common_cohort:
+  enforce_strict_parity: true
+  drop_missing_technicals: true
+  retain_no_news_days: true
+  manifest_path: "artifacts/final/common_cohort_manifest.parquet"
+
+secondary_analysis:
+  news_days_only:
+    filter_condition: "has_news == 1"
+    models: ["X3", "X4", "X5", "X6"]
+
+baselines:
+  - name: "always_up"
+    prediction_rule: "constant_1"
+  - name: "previous_direction"
+    prediction_rule: "return_1d > 0"
+
+primary_hypothesis:
+  experiment: "X5"
+  comparator: "X3"
+  protocol: "protocol_b"
+  metric: "date_level_accuracy"
+  direction: "greater_than"
+  alpha: 0.05
+  confidence_level: 0.95
+
+bootstrap:
+  reps: 10000
+  primary_block_length: 10
+  sensitivity_block_lengths: [3, 5, 10, 15, 20]
+  unit: "contiguous_trading_dates"
+  keep_stocks_together: true

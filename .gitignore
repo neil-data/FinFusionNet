@@ -41,7 +41,11 @@ ENV/
 .ipynb_checkpoints
 
 # Large datasets / local runs
-# data/raw/*
-# !data/raw/**/.gitkeep
-# data/interim/*
-# data/processed/*
+data/raw/*
+!data/raw/**/.gitkeep
+!data/raw/gdelt/manifest.jsonl
+data/interim/*
+!data/interim/**/.gitkeep
+data/processed/*
+!data/processed/**/.gitkeep
+*.parquet

@@ -1,0 +1,29 @@
+{
+  "experiment_id": "X4",
+  "description": "Technical + news availability + VADER",
+  "protocol": "protocol_b",
+  "news_days_only": false,
+  "execution_timestamp": "2026-10-16_113950",
+  "n_folds": 45,
+  "total_test_predictions": 9141,
+  "unique_test_dates": 1411,
+  "primary_metric_equal_weighted_date_accuracy": 0.5031892274982283,
+  "pooled_accuracy": 0.5023520402581775,
+  "pooled_f1": 0.5271801268059453,
+  "pooled_roc_auc": 0.5050942643211955,
+  "pooled_log_loss": 0.6927404999732971,
+  "baseline_always_up_accuracy": 0.5053057652335631,
+  "baseline_previous_direction_accuracy": 0.49994530138934473,
+  "lift_over_always_up": -0.0029537249753855965,
+  "lift_over_previous_direction": 0.0024067388688327473,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}

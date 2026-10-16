@@ -1,1 +1,58 @@
-# Models configuration
+# FinFusionNet Models Configuration: XGBoost Track
+
+xgboost:
+  objective: "binary:logistic"
+  eval_metric:
+    - "auc"
+    - "logloss"
+  n_estimators: 500
+  learning_rate: 0.03
+  max_depth: 4
+  min_child_weight: 5
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_alpha: 0.1
+  reg_lambda: 2.0
+  gamma: 0.0
+  tree_method: "hist"
+  n_jobs: 4
+  random_state: 42
+
+prediction:
+  threshold: 0.50
+  threshold_tuning: false
+
+experiments:
+  X1:
+    description: "Technical-only baseline"
+    groups:
+      - "group_a_technical"
+  X2:
+    description: "Technical + market context"
+    groups:
+      - "group_a_technical"
+      - "group_b_market_context"
+  X3:
+    description: "Technical + news availability control"
+    groups:
+      - "group_a_technical"
+      - "group_c_news_availability"
+  X4:
+    description: "Technical + news availability + VADER"
+    groups:
+      - "group_a_technical"
+      - "group_c_news_availability"
+      - "group_d_vader"
+  X5:
+    description: "Technical + news availability + FinBERT"
+    groups:
+      - "group_a_technical"
+      - "group_c_news_availability"
+      - "group_e_finbert"
+  X6:
+    description: "Technical + news availability + VADER + FinBERT"
+    groups:
+      - "group_a_technical"
+      - "group_c_news_availability"
+      - "group_d_vader"
+      - "group_e_finbert"

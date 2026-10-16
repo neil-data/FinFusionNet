@@ -1,0 +1,29 @@
+{
+  "experiment_id": "X5",
+  "description": "Technical + news availability + FinBERT",
+  "protocol": "protocol_b",
+  "news_days_only": false,
+  "execution_timestamp": "2026-10-16_114011",
+  "n_folds": 45,
+  "total_test_predictions": 9141,
+  "unique_test_dates": 1411,
+  "primary_metric_equal_weighted_date_accuracy": 0.507289662853093,
+  "pooled_accuracy": 0.5065091346679794,
+  "pooled_f1": 0.5335539241029883,
+  "pooled_roc_auc": 0.5104756194703357,
+  "pooled_log_loss": 0.6925818920135498,
+  "baseline_always_up_accuracy": 0.5053057652335631,
+  "baseline_previous_direction_accuracy": 0.49994530138934473,
+  "lift_over_always_up": 0.001203369434416346,
+  "lift_over_previous_direction": 0.00656383327863469,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}

@@ -1,1 +1,85 @@
-# Features configuration
+# FinFusionNet Features Configuration
+
+primary_target:
+  name: "target"
+  definition: "next_session_return > 0"
+  zero_return_class: 0
+  prediction_horizon: 1  # 1 trading session
+
+secondary_target:
+  name: "relative_target"
+  definition: "(stock_next_session_return - nifty_next_session_return) > 0"
+  zero_return_class: 0
+
+missing_data_policy:
+  technical_warmup: "drop_rows"
+  news_sentiment:
+    no_news:
+      n_articles: 0
+      has_news: 0
+      sentiment_features: null  # Native NaN in XGBoost
+    pipeline_failure: "flag_and_log"
+  infinite_values: "convert_to_null"
+
+feature_groups:
+  group_a_technical:
+    returns:
+      - "return_1d"
+      - "return_2d"
+      - "return_5d"
+      - "return_10d"
+      - "return_20d"
+    trend:
+      - "close_sma_5_ratio"
+      - "close_sma_10_ratio"
+      - "close_sma_20_ratio"
+      - "close_sma_50_ratio"
+      - "sma_5_sma_20_ratio"
+    momentum:
+      - "rsi_14"
+      - "macd"
+      - "macd_signal"
+      - "macd_histogram"
+    volatility:
+      - "atr_14_pct"
+      - "bb_width_20"
+      - "volatility_10"
+      - "volatility_20"
+    volume:
+      - "volume_change_1d"
+      - "volume_ratio_5"
+      - "volume_ratio_20"
+    price_action:
+      - "high_low_range_pct"
+      - "close_open_return"
+      - "close_position_in_range"
+
+  group_b_market_context:
+    - "nifty_return_1d"
+    - "nifty_return_5d"
+    - "nifty_return_20d"
+    - "nifty_volatility_10"
+    - "nifty_volatility_20"
+
+  group_c_news_availability:
+    - "n_articles"
+    - "has_news"
+
+  group_d_vader:
+    - "vader_mean"
+    - "vader_positive_mean"
+    - "vader_negative_mean"
+    - "vader_neutral_mean"
+    - "vader_dispersion"
+
+  group_e_finbert:
+    - "finbert_positive_mean"
+    - "finbert_negative_mean"
+    - "finbert_neutral_mean"
+    - "finbert_dispersion"
+    - "finbert_confidence"
+
+categorical_encoding:
+  method: "one_hot"
+  handle_unknown: "ignore"
+  fit_partition: "training_fold_only"
