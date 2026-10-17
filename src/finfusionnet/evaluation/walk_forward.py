@@ -45,8 +45,7 @@ class WalkForwardEngine:
         Total sessions for N folds = train_sessions + test_sessions + (N - 1) * step_sessions.
         For 34 folds: 46 + 15 + 33 * 17 = 622 sessions.
         """
-        df_sorted = df.sort_values(self.date_col).copy()
-        unique_dates = pd.DatetimeIndex(sorted(df_sorted[self.date_col].unique()))
+        unique_dates = pd.DatetimeIndex(sorted(df[self.date_col].unique()))
         n_dates = len(unique_dates)
 
         folds: List[FoldData] = []
@@ -66,10 +65,10 @@ class WalkForwardEngine:
 
             # Purge train boundary: last train observation's target_date must precede first test date
             first_test_date = test_dates[0]
-            train_mask = (df_sorted[self.date_col].isin(train_dates)) & (
-                df_sorted[self.target_date_col] < first_test_date
+            train_mask = (df[self.date_col].isin(train_dates)) & (
+                df[self.target_date_col] < first_test_date
             )
-            test_mask = df_sorted[self.date_col].isin(test_dates)
+            test_mask = df[self.date_col].isin(test_dates)
 
             train_indices = np.where(train_mask)[0]
             test_indices = np.where(test_mask)[0]
@@ -108,8 +107,7 @@ class WalkForwardEngine:
         2. Validation partition is the latest chronological fraction (15%) of train dates.
         3. Target-date purging applied at train/val boundary and val/test boundary.
         """
-        df_sorted = df.sort_values(self.date_col).copy()
-        unique_dates = pd.DatetimeIndex(sorted(df_sorted[self.date_col].unique()))
+        unique_dates = pd.DatetimeIndex(sorted(df[self.date_col].unique()))
         
         start_date = unique_dates.min()
         end_date = unique_dates.max()
@@ -148,15 +146,15 @@ class WalkForwardEngine:
 
             # Target-date purging
             # 1. Train target_date must be strictly before first_val_date
-            train_mask = (df_sorted[self.date_col].isin(train_dates)) & (
-                df_sorted[self.target_date_col] < first_val_date
+            train_mask = (df[self.date_col].isin(train_dates)) & (
+                df[self.target_date_col] < first_val_date
             )
             # 2. Val target_date must be strictly before first_test_date
-            val_mask = (df_sorted[self.date_col].isin(val_dates)) & (
-                df_sorted[self.target_date_col] < first_test_date
+            val_mask = (df[self.date_col].isin(val_dates)) & (
+                df[self.target_date_col] < first_test_date
             )
             # 3. Test rows
-            test_mask = df_sorted[self.date_col].isin(test_dates)
+            test_mask = df[self.date_col].isin(test_dates)
 
             train_indices = np.where(train_mask)[0]
             val_indices = np.where(val_mask)[0]

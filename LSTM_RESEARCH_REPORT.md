@@ -56,18 +56,18 @@ All comparisons use 10,000 paired date-block bootstrap iterations ($L=10$ tradin
 
 ---
 
-## 5. Direct Head-to-Head Comparison: XGBoost vs LSTM
+## 5. Direct Head-to-Head Comparison: XGBoost vs LSTM (Audited Parity Match)
 
-Both model families were evaluated on the **identical Common Evaluation Cohort** across the same out-of-sample trading dates:
+Both model families were evaluated on the **identical Common Evaluation Cohort** across the same 915 out-of-sample trading dates ($L=10$ day date-block bootstrap, 10,000 resamples):
 
-| Feature Tier | XGBoost ID | LSTM ID | XGB Date Acc | LSTM Date Acc | Diff (LSTM - XGB) | 95% Bootstrap CI | p-value | Statistically Different? |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Technical Only | **X1** | **L1** | 0.5107 | 0.4984 | **-0.0109** | [-0.0277, +0.0075] | 0.2238 | **NO** |
-| Technical + Market Context | **X2** | **L2** | 0.5593 | 0.4941 | **-0.0582** | [-0.0767, -0.0376] | 0.0000 | **YES** |
-| Technical + Context + News Control | **X3** | **L3** | 0.5076 | 0.4893 | **-0.0184** | [-0.0382, -0.0003] | 0.0610 | **YES** |
-| Technical + Context + VADER | **X4** | **L4** | 0.5032 | 0.5019 | **+0.0026** | [-0.0152, +0.0199] | 0.7748 | **NO** |
-| Technical + Context + FinBERT | **X5** | **L5** | 0.5073 | 0.4950 | **-0.0114** | [-0.0288, +0.0055] | 0.1904 | **NO** |
-| Technical + Context + Combined Sentiment | **X6** | **L6** | 0.5087 | 0.4926 | **-0.0090** | [-0.0272, +0.0111] | 0.3590 | **NO** |
+| Feature Tier | XGBoost ID | LSTM ID | XGB Date Acc | LSTM Date Acc | Diff (LSTM - XGB) | 95% Bootstrap CI | Raw p-val | Holm Adj p | Statistically Different? |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Technical Only Baseline | **X1** | **L1** | 0.4980 | 0.4984 | **+0.0003** | [-0.0102, +0.0092] | 0.9526 | 1.0000 | **NO** |
+| Technical + Market Context | **X2** | **L2** | 0.5002 | 0.4941 | **-0.0061** | [-0.0219, +0.0074] | 0.3428 | 1.0000 | **NO** |
+| Technical + Context + News Control | **X3** | **L3** | 0.4993 | 0.4893 | **-0.0101** | [-0.0272, +0.0037] | 0.1390 | 0.8340 | **NO** |
+| Technical + Context + News Control + VADER | **X4** | **L4** | 0.5015 | 0.5019 | **+0.0003** | [-0.0142, +0.0117] | 0.8188 | 1.0000 | **NO** |
+| Technical + Context + News Control + FinBERT | **X5** | **L5** | 0.5004 | 0.4950 | **-0.0055** | [-0.0210, +0.0064] | 0.2918 | 1.0000 | **NO** |
+| Technical + Context + News Control + Combined Sentiment | **X6** | **L6** | 0.4995 | 0.4926 | **-0.0069** | [-0.0219, +0.0060] | 0.2386 | 1.0000 | **NO** |
 
 ---
 

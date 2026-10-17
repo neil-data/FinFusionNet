@@ -60,13 +60,17 @@ def paired_date_block_bootstrap(
     ci_lower = float(np.percentile(boot_means, lower_pct))
     ci_upper = float(np.percentile(boot_means, upper_pct))
 
-    # Two-sided empirical p-value under null H0: mean_diff = 0
-    # Center bootstrap distribution under null
-    boot_means_centered = boot_means - observed_mean_diff
-    p_two_sided = float(np.mean(np.abs(boot_means_centered) >= np.abs(observed_mean_diff)))
+    # Two-sided empirical p-value strictly inverted from the bootstrap distribution
+    # Guarantees exact mathematical agreement between p < alpha and 0 not in [ci_lower, ci_upper]
+    p_tail_le_0 = float(np.mean(boot_means <= 0.0))
+    p_tail_ge_0 = float(np.mean(boot_means >= 0.0))
+    p_two_sided = min(1.0, 2.0 * min(p_tail_le_0, p_tail_ge_0))
 
     # One-sided empirical p-value for H1: mean_diff > 0
-    p_one_sided = float(np.mean(boot_means <= 0.0))
+    p_one_sided = p_tail_le_0
+
+    # Decision rule: significant at alpha=0.05 strictly when p_two_sided < alpha
+    is_sig = bool(p_two_sided < alpha)
 
     return {
         "observed_mean_difference": observed_mean_diff,
@@ -77,7 +81,7 @@ def paired_date_block_bootstrap(
         "block_length": block_length,
         "n_bootstraps": n_bootstraps,
         "n_dates": n_dates,
-        "is_significant_05": bool((ci_lower > 0.0) or (ci_upper < 0.0)),
+        "is_significant_05": is_sig,
     }
 
 

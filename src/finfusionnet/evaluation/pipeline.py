@@ -64,20 +64,36 @@ EXPERIMENT_SPECS: Dict[str, Dict[str, Union[str, List[str]]]] = {
         "groups": ["group_a_technical", "group_b_market_context"],
     },
     "X3": {
-        "description": "Technical + news availability control",
-        "groups": ["group_a_technical", "group_c_news_availability"],
+        "description": "Technical + market context + news availability control",
+        "groups": ["group_a_technical", "group_b_market_context", "group_c_news_availability"],
     },
     "X4": {
-        "description": "Technical + news availability + VADER",
-        "groups": ["group_a_technical", "group_c_news_availability", "group_d_vader"],
+        "description": "Technical + market context + news availability + VADER",
+        "groups": [
+            "group_a_technical",
+            "group_b_market_context",
+            "group_c_news_availability",
+            "group_d_vader",
+        ],
     },
     "X5": {
-        "description": "Technical + news availability + FinBERT",
-        "groups": ["group_a_technical", "group_c_news_availability", "group_e_finbert"],
+        "description": "Technical + market context + news availability + FinBERT",
+        "groups": [
+            "group_a_technical",
+            "group_b_market_context",
+            "group_c_news_availability",
+            "group_e_finbert",
+        ],
     },
     "X6": {
-        "description": "Technical + news availability + VADER + FinBERT",
-        "groups": ["group_a_technical", "group_c_news_availability", "group_d_vader", "group_e_finbert"],
+        "description": "Technical + market context + news availability + VADER + FinBERT",
+        "groups": [
+            "group_a_technical",
+            "group_b_market_context",
+            "group_c_news_availability",
+            "group_d_vader",
+            "group_e_finbert",
+        ],
     },
 }
 
@@ -167,6 +183,9 @@ def run_experiment(
 
     # Filter to cohort
     cohort_df, cohort_stats = build_common_evaluation_cohort(master_df)
+
+    # Ensure chronological date-level ordering for consistent indexing
+    cohort_df = cohort_df.sort_values(["date", "ticker"]).reset_index(drop=True)
 
     # Optional secondary news-days-only filter
     if news_days_only:
