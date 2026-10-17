@@ -1,0 +1,29 @@
+{
+  "experiment_id": "X3",
+  "description": "Technical + market context + news availability control",
+  "protocol": "protocol_a",
+  "news_days_only": false,
+  "execution_timestamp": "2026-10-17_110417",
+  "n_folds": 34,
+  "total_test_predictions": 5100,
+  "unique_test_dates": 510,
+  "primary_metric_equal_weighted_date_accuracy": 0.4984313725490196,
+  "pooled_accuracy": 0.4984313725490196,
+  "pooled_f1": 0.5354159099164548,
+  "pooled_roc_auc": 0.5030852219179711,
+  "pooled_log_loss": 0.8490740060806274,
+  "baseline_always_up_accuracy": 0.5213725490196078,
+  "baseline_previous_direction_accuracy": 0.49941176470588233,
+  "lift_over_always_up": -0.022941176470588243,
+  "lift_over_previous_direction": -0.0009803921568627416,
+  "cohort_stats": {
+    "total_input_rows": 16720,
+    "excluded_outside_modeling_window": 2510,
+    "excluded_missing_target": 80,
+    "excluded_incomplete_technical_warmup": 19,
+    "excluded_missing_market_context": 10,
+    "final_eligible_cohort_rows": 14101,
+    "unique_stocks": 10,
+    "unique_dates": 1411
+  }
+}
