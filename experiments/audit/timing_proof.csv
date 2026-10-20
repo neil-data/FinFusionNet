@@ -1,0 +1,16 @@
+ticker,feature_date_t,close_t,close_t_plus_1,target_return,target,target_date,context
+RELIANCE,2023-01-06,1170.78,1198.42,0.023611,1,2023-01-09,Friday -> Monday (3d gap) [Weekend]
+RELIANCE,2023-01-25,1099.55,1078.69,-0.018971,0,2023-01-27,Wednesday -> Friday (2d gap) [Holiday: 2023-01-26]
+RELIANCE,2023-03-06,1111.61,1115.61,0.003591,1,2023-03-08,Monday -> Wednesday (2d gap) [Holiday: 2023-03-07]
+RELIANCE,2023-02-14,1097.49,1122.34,0.022644,1,2023-02-15,Tuesday -> Wednesday (1d gap)
+RELIANCE,2023-02-15,1122.34,1121.47,-0.000781,0,2023-02-16,Wednesday -> Thursday (1d gap)
+TCS,2023-01-06,3211.55,3319.95,0.033753,1,2023-01-09,Friday -> Monday (3d gap) [Weekend]
+TCS,2023-01-25,3429.75,3411.05,-0.005452,0,2023-01-27,Wednesday -> Friday (2d gap) [Holiday: 2023-01-26]
+TCS,2023-03-06,3371.85,3390.4,0.005501,1,2023-03-08,Monday -> Wednesday (2d gap) [Holiday: 2023-03-07]
+TCS,2023-02-14,3500.1,3520.65,0.005871,1,2023-02-15,Tuesday -> Wednesday (1d gap)
+TCS,2023-02-15,3520.65,3558.05,0.010623,1,2023-02-16,Wednesday -> Thursday (1d gap)
+INFY,2023-01-06,1448.5,1484.45,0.024819,1,2023-01-09,Friday -> Monday (3d gap) [Weekend]
+INFY,2023-01-25,1543.0,1519.15,-0.015457,0,2023-01-27,Wednesday -> Friday (2d gap) [Holiday: 2023-01-26]
+INFY,2023-03-06,1507.45,1492.7,-0.009785,0,2023-03-08,Monday -> Wednesday (2d gap) [Holiday: 2023-03-07]
+INFY,2023-02-14,1593.25,1597.05,0.002385,1,2023-02-15,Tuesday -> Wednesday (1d gap)
+INFY,2023-02-15,1597.05,1601.8,0.002974,1,2023-02-16,Wednesday -> Thursday (1d gap)

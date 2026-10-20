@@ -1,1 +1,63 @@
 ticker,name,sector,market_cap,is_active
+ADANIENT,Adani Enterprises Ltd.,Metals & Mining,Large,1
+ADANIPORTS,Adani Ports & SEZ Ltd.,Services,Large,1
+APOLLOHOSP,Apollo Hospitals Enterprise Ltd.,Healthcare,Large,1
+ASIANPAINT,Asian Paints Ltd.,Consumer Durables,Large,1
+AXISBANK,Axis Bank Ltd.,Financials,Large,1
+BAJAJ-AUTO,Bajaj Auto Ltd.,Automobile,Large,1
+BAJAJFINSV,Bajaj Finserv Ltd.,Financials,Large,1
+BAJFINANCE,Bajaj Finance Ltd.,Financials,Large,1
+BEL,Bharat Electronics Ltd.,Capital Goods,Large,1
+BHARTIARTL,Bharti Airtel Ltd.,Telecom,Large,1
+BPCL,Bharat Petroleum Corporation Ltd.,Oil & Gas,Large,0
+BRITANNIA,Britannia Industries Ltd.,FMCG,Large,0
+BSE,BSE Ltd.,Financials,Large,1
+CIPLA,Cipla Ltd.,Healthcare,Large,1
+COALINDIA,Coal India Ltd.,Metals & Mining,Large,1
+DIVISLAB,Divi's Laboratories Ltd.,Healthcare,Large,0
+DRREDDY,Dr. Reddy's Laboratories Ltd.,Healthcare,Large,1
+EICHERMOT,Eicher Motors Ltd.,Automobile,Large,1
+ETERNAL,Eternal Ltd. / Zomato,Consumer Services,Large,1
+GAIL,GAIL (India) Ltd.,Oil & Gas,Large,0
+GRASIM,Grasim Industries Ltd.,Materials,Large,1
+HCLTECH,HCL Technologies Ltd.,IT,Large,1
+HDFC,Housing Development Finance Corp (Merged),Financials,Large,0
+HDFCBANK,HDFC Bank Ltd.,Financials,Large,1
+HDFCLIFE,HDFC Life Insurance Co Ltd.,Financials,Large,1
+HEROMOTOCO,Hero MotoCorp Ltd.,Automobile,Large,0
+HINDALCO,Hindalco Industries Ltd.,Metals & Mining,Large,1
+HINDUNILVR,Hindustan Unilever Ltd.,FMCG,Large,1
+ICICIBANK,ICICI Bank Ltd.,Financials,Large,1
+INDIGO,InterGlobe Aviation Ltd.,Consumer Services,Large,1
+INDUSINDBK,IndusInd Bank Ltd.,Financials,Large,0
+INFY,Infosys Ltd.,IT,Large,1
+IOC,Indian Oil Corporation Ltd.,Oil & Gas,Large,0
+ITC,ITC Ltd.,FMCG,Large,1
+JIOFIN,Jio Financial Services Ltd.,Financials,Large,1
+JSWSTEEL,JSW Steel Ltd.,Metals & Mining,Large,1
+KOTAKBANK,Kotak Mahindra Bank Ltd.,Financials,Large,1
+LT,Larsen & Toubro Ltd.,Construction,Large,1
+LTIM,LTIMindtree Ltd.,IT,Large,0
+M&M,Mahindra & Mahindra Ltd.,Automobile,Large,1
+MARUTI,Maruti Suzuki India Ltd.,Automobile,Large,1
+MAXHEALTH,Max Healthcare Institute Ltd.,Healthcare,Large,1
+NESTLEIND,Nestle India Ltd.,FMCG,Large,1
+NTPC,NTPC Ltd.,Power,Large,1
+ONGC,Oil & Natural Gas Corp Ltd.,Oil & Gas,Large,1
+POWERGRID,Power Grid Corporation of India Ltd.,Power,Large,1
+RELIANCE,Reliance Industries Ltd.,Oil & Gas,Large,1
+SBILIFE,SBI Life Insurance Co Ltd.,Financials,Large,1
+SBIN,State Bank of India,Financials,Large,1
+SHREECEM,Shree Cement Ltd.,Materials,Large,0
+SHRIRAMFIN,Shriram Finance Ltd.,Financials,Large,1
+SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Healthcare,Large,1
+TATACONSUM,Tata Consumer Products Ltd.,FMCG,Large,1
+TATAMOTORS,Tata Motors Ltd. (TMPV),Automobile,Large,1
+TATASTEEL,Tata Steel Ltd.,Metals & Mining,Large,1
+TCS,Tata Consultancy Services Ltd.,IT,Large,1
+TECHM,Tech Mahindra Ltd.,IT,Large,1
+TITAN,Titan Company Ltd.,Consumer Durables,Large,1
+TRENT,Trent Ltd.,Consumer Services,Large,1
+ULTRACEMCO,UltraTech Cement Ltd.,Materials,Large,1
+UPL,UPL Ltd.,Chemicals,Large,0
+WIPRO,Wipro Ltd.,IT,Large,0

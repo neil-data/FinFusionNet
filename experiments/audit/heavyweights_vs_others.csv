@@ -1,0 +1,5 @@
+cohort_subset,model,n_observations,date_level_acc,pooled_acc,roc_auc,predicted_up_share
+10 Heavyweights,XGB-P,9151,0.4976,0.4971,0.505,0.9232
+10 Heavyweights,LSTM-P,9142,0.5049,0.5039,0.5006,0.6875
+Non-Heavyweights (Rest),XGB-P,34905,0.5027,0.5026,0.5014,0.9057
+Non-Heavyweights (Rest),LSTM-P,34728,0.5106,0.5103,0.5139,0.6202

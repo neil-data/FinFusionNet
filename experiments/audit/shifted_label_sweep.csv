@@ -1,0 +1,8 @@
+k,pandas_shift,semantics,linear_date_acc,linear_pooled_acc,linear_auc,xgb_date_acc,xgb_pooled_acc,xgb_auc
+-3,3,Past return (t-3 -> t-2),0.6258,0.627,0.6769,0.7985,0.7983,0.8802
+-2,2,Past return (t-2 -> t-1),0.676,0.6773,0.7365,0.9518,0.9517,0.9864
+-1,1,"Past return (t-1 -> t, known at t)",0.7198,0.7203,0.7872,0.9909,0.9909,0.9957
+0,0,Real target (return t -> t+1),0.5045,0.5035,0.5002,0.4977,0.4972,0.5037
+1,-1,Future return (t+1 -> t+2),0.5001,0.4991,0.4933,0.4981,0.4976,0.5073
+2,-2,Future return (t+2 -> t+3),0.4922,0.4912,0.4908,0.4934,0.4929,0.504
+3,-3,Future return (t+3 -> t+4),0.493,0.494,0.4897,0.4951,0.4956,0.5085
