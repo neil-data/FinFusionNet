@@ -1,0 +1,4 @@
+model_family,baseline,fusion,acc_diff_f1_minus_f0,bootstrap_95_ci,bootstrap_p_value,mcnemar_wins_diff,mcnemar_p_value,holm_bonferroni_p_value,statistically_significant
+XGBoost,XGB-F0 (Price-Only),XGB-F1 (Price + VADER),0.0002,"[-0.0130, 0.0117]",0.5339,-6,0.8657,1.0,False
+Logistic Regression,LR-F0 (Price-Only),LR-F1 (Price + VADER),-0.0013,"[-0.0035, 0.0011]",0.8468,-12,0.669,1.0,False
+LSTM (Seed 42),"LSTM-F0 (Price-Only, Seed 42)","LSTM-F1 (Price + VADER, Seed 42)",-0.0035,"[-0.0100, 0.0024]",0.8741,15,0.6217,1.0,False
