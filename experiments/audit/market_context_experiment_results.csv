@@ -1,0 +1,7 @@
+configuration,date_level_acc,pooled_acc,balanced_acc,roc_auc,brier_score,log_loss,predicted_up_share,lift_over_base
+XGB-P (X1: Group A Only),0.5065,0.5065,0.5062,0.5084,0.2565,0.707,0.555,Base
+XGB-P (X2: Group A + Group B),0.5116,0.5106,0.5104,0.5142,0.2616,0.7195,0.53,"+0.0052 [-0.0044, 0.0164] (p=0.1359)"
+Linear-1 (Group A Only),0.5093,0.5082,0.5075,0.5103,0.2505,0.6942,0.6649,Base
+Linear-2 (Group A + Group B),0.5152,0.5141,0.5138,0.5195,0.2501,0.6936,0.5697,"+0.0058 [-0.0014, 0.0123] (p=0.0599)"
+LSTM-P (L1: Group A Only),0.5116,0.5105,0.51,0.515,0.2501,0.6934,0.6135,Base
+LSTM-P (L2: Group A + Group B),0.5149,0.5139,0.5139,0.5173,0.2509,0.6951,0.4854,"+0.0033 [-0.0070, 0.0124] (p=0.3031)"

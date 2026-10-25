@@ -44,27 +44,27 @@ def build_audit_universe_dataset(
     print(f"Loaded {len(stocks_df)} raw records across {stocks_df['ticker'].nunique()} tickers.", flush=True)
     print(f"Loaded {len(nifty_df)} benchmark records.", flush=True)
 
-    # 2. Point-in-Time Filtering
-    print("\n[2/5] Applying Point-in-Time constituent filter...", flush=True)
-    pit_df = universe.filter_point_in_time(stocks_df)
-    print(f"Retained {len(pit_df)} eligible point-in-time observations.", flush=True)
+    # 2. Compute Group A Technical Features on raw price series (providing complete warmup)
+    print("\n[2/5] Computing Group A Technical Indicators on raw series...", flush=True)
+    tech_df = compute_technical_indicators(stocks_df)
+    print(f"Computed technical indicators on full raw series.", flush=True)
 
-    # 3. Compute Group A Technical Features
-    print("\n[3/5] Computing Group A Technical Indicators...", flush=True)
-    tech_df = compute_technical_indicators(pit_df)
-    print(f"Computed technical indicators.", flush=True)
-
-    # 4. Optional Market Context (Group B)
+    # 3. Market Context (Group B)
     if not nifty_df.empty:
         context_df = compute_market_context(nifty_df)
         full_df = pd.merge(tech_df, context_df, on="date", how="left")
     else:
         full_df = tech_df
 
-    # 5. Compute Targets
-    print("\n[4/5] Computing forward next-session targets...", flush=True)
+    # 4. Compute Targets
+    print("\n[3/5] Computing forward next-session targets...", flush=True)
     calendar = get_trading_calendar(start_date, end_date)
-    final_df = compute_targets(full_df, nifty_df=nifty_df, calendar=calendar)
+    targets_df = compute_targets(full_df, nifty_df=nifty_df, calendar=calendar)
+
+    # 5. Point-in-Time Filtering (Survivorship Bias Elimination)
+    print("\n[4/5] Applying Point-in-Time constituent filter...", flush=True)
+    final_df = universe.filter_point_in_time(targets_df)
+    print(f"Retained {len(final_df)} eligible point-in-time observations.", flush=True)
 
     out_file = Path(output_path)
     out_file.parent.mkdir(parents=True, exist_ok=True)

@@ -62,25 +62,18 @@ def build_master_dataset(
     if stocks_df.empty:
         raise ValueError("Failed to fetch market data.")
 
-    # 2. Point-in-time filtering (Survivorship Bias Elimination)
-    print("\n[2/6] Applying dynamic point-in-time constituent filter...")
-    initial_rows = len(stocks_df)
-    pit_df = universe.filter_point_in_time(stocks_df)
-    print(f"Retained {len(pit_df)} eligible observations (dropped {initial_rows - len(pit_df)} non-constituent rows).")
-
-    # 3. Compute Group A Technical Features
-    print("\n[3/6] Computing causal Group A technical indicators...")
-    tech_df = compute_technical_indicators(pit_df)
+    # 2. Compute Group A Technical Features on raw price series (providing complete warmup)
+    print("\n[2/6] Computing causal Group A technical indicators on raw price series...")
+    tech_df = compute_technical_indicators(stocks_df)
     print(f"Computed 24 technical indicators.")
 
-    # 4. Compute Group B Market Context
-    print("\n[4/6] Computing Group B market context from NIFTY 50...")
+    # 3. Compute Group B Market Context
+    print("\n[3/6] Computing Group B market context from NIFTY 50...")
     context_df = compute_market_context(nifty_df)
     full_df = pd.merge(tech_df, context_df, on="date", how="left")
 
-    # 5. Integrate News Availability & Sentiment (Groups C, D, E)
-    print("\n[5/6] Integrating news availability and sentiment features...")
-    # Check if pre-extracted interim news exists
+    # 4. Integrate News Availability & Sentiment (Groups C, D, E)
+    print("\n[4/6] Integrating news availability and sentiment features...")
     news_path = Path("data/interim/news/ticker_day_news_sentiment.parquet")
     if news_path.exists():
         news_sentiment_df = pd.read_parquet(news_path)
@@ -91,10 +84,16 @@ def build_master_dataset(
 
     master_df = integrate_sentiment_features(full_df, news_sentiment_df)
 
-    # 6. Target Formulation
-    print("\n[6/6] Computing primary and secondary targets...")
+    # 5. Target Formulation
+    print("\n[5/6] Computing primary and secondary targets...")
     cal = get_trading_calendar(start_date, end_date)
-    final_df = compute_targets(master_df, nifty_df=nifty_df, calendar=cal)
+    targets_df = compute_targets(master_df, nifty_df=nifty_df, calendar=cal)
+
+    # 6. Point-in-time filtering (Survivorship Bias Elimination)
+    print("\n[6/6] Applying dynamic point-in-time constituent filter...")
+    initial_rows = len(targets_df)
+    final_df = universe.filter_point_in_time(targets_df)
+    print(f"Retained {len(final_df)} eligible observations (dropped {initial_rows - len(final_df)} non-constituent rows).")
 
     # Save to Parquet
     out_file = Path(output_path)

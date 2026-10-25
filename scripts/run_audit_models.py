@@ -27,7 +27,7 @@ import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, roc_auc_score, log_loss
 
-torch.set_num_threads(4)
+torch.set_num_threads(6)
 
 from finfusionnet.evaluation.pipeline import FEATURE_GROUPS
 from finfusionnet.evaluation.walk_forward import WalkForwardEngine
@@ -292,6 +292,39 @@ def run_audit_models():
         "min_auc": round(float(np.min(seed_aucs)), 4),
         "max_auc": round(float(np.max(seed_aucs)), 4),
     }
+
+    # Detailed per-seed metrics export
+    seed_records = []
+    for s in seeds:
+        y_prob_s = all_lstm[f"y_prob_seed_{s}"].values
+        y_pred_s = (y_prob_s >= 0.50).astype(int)
+        m_s = compute_metrics_dict(all_lstm["y_true"].values, y_pred_s, y_prob_s, all_lstm["date"].values)
+        seed_records.append({
+            "seed": str(s),
+            "date_level_acc": m_s["date_level_acc"],
+            "pooled_acc": m_s["pooled_acc"],
+            "balanced_acc": m_s["balanced_acc"],
+            "roc_auc": m_s["roc_auc"],
+            "brier_score": m_s["brier_score"],
+            "log_loss": m_s["log_loss"],
+            "predicted_up_share": m_s["predicted_up_share"],
+            "mean_predicted_prob": m_s["mean_predicted_prob"],
+        })
+    seed_records.append({
+        "seed": "5-Seed Ensemble",
+        "date_level_acc": m_lstm["date_level_acc"],
+        "pooled_acc": m_lstm["pooled_acc"],
+        "balanced_acc": m_lstm["balanced_acc"],
+        "roc_auc": m_lstm["roc_auc"],
+        "brier_score": m_lstm["brier_score"],
+        "log_loss": m_lstm["log_loss"],
+        "predicted_up_share": m_lstm["predicted_up_share"],
+        "mean_predicted_prob": m_lstm["mean_predicted_prob"],
+    })
+    seed_df = pd.DataFrame(seed_records)
+    seed_df.to_csv("experiments/audit/lstm_seed_performance.csv", index=False)
+    print("\n--- LSTM 5-SEED PERFORMANCE BREAKDOWN ---", flush=True)
+    print(seed_df.to_string(index=False), flush=True)
 
     # Date-level accuracies
     daily_xgb = all_xgb.groupby("date").apply(lambda g: np.mean(g["y_true"] == g["y_pred"]), include_groups=False).sort_index()
