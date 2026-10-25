@@ -1,0 +1,7 @@
+comparison,baseline,alternative,acc_diff,bootstrap_95_ci,bootstrap_p_value,mcnemar_wins_diff,mcnemar_p_value,holm_bonferroni_p_value,statistically_significant
+XGB: All-50 News vs Price-Only,XGB-F0 (Price-Only),XGB-F1_All50 (All-50 News),0.0026,"[-0.0098, 0.0130]",0.3849,20,0.5214,1.0,False
+LR: All-50 News vs Price-Only,LR-F0 (Price-Only),LR-F1_All50 (All-50 News),-0.0024,"[-0.0055, 0.0006]",0.9423,-51,0.0629,1.0,False
+LSTM: All-50 News vs Price-Only,"LSTM-F0 (Price-Only, Seed 42)","LSTM-F1_All50 (All-50 News, Seed 42)",-0.0009,"[-0.0068, 0.0047]",0.6495,-4,0.9155,1.0,False
+XGB: All-50 News vs 10-Stock News,XGB-F1_10 (10-Stock News),XGB-F1_All50 (All-50 News),0.0024,"[-0.0027, 0.0078]",0.2091,25,0.3959,1.0,False
+LR: All-50 News vs 10-Stock News,LR-F1_10 (10-Stock News),LR-F1_All50 (All-50 News),-0.0012,"[-0.0043, 0.0018]",0.7802,-32,0.2532,1.0,False
+LSTM: All-50 News vs 10-Stock News,"LSTM-F1_10 (10-Stock News, Seed 42)","LSTM-F1_All50 (All-50 News, Seed 42)",0.0026,"[-0.0014, 0.0066]",0.1029,18,0.5412,0.6174,False

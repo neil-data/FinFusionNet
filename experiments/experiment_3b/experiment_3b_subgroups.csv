@@ -1,0 +1,37 @@
+subgroup,model_configuration,observations,pct_cohort,date_level_acc,pooled_acc,balanced_acc,roc_auc,brier_score
+All-50 Active News Days,XGB-F0 (Price-Only),32705,72.46,0.5032,0.5013,0.4994,0.5072,0.2502
+All-50 Active News Days,XGB-F1_10 (10-Stock News),32705,72.46,0.5012,0.5017,0.5014,0.5082,0.2564
+All-50 Active News Days,XGB-F1_All50 (All-50 News),32705,72.46,0.503,0.5025,0.5022,0.5079,0.2568
+All-50 Active News Days,LR-F0 (Price-Only),32705,72.46,0.5092,0.5081,0.5074,0.5115,0.2504
+All-50 Active News Days,LR-F1_10 (10-Stock News),32705,72.46,0.5079,0.5069,0.5062,0.5102,0.2505
+All-50 Active News Days,LR-F1_All50 (All-50 News),32705,72.46,0.5072,0.5059,0.5049,0.5117,0.2506
+All-50 Active News Days,"LSTM-F0 (Price-Only, Seed 42)",32705,72.46,0.5098,0.509,0.5084,0.5149,0.2502
+All-50 Active News Days,"LSTM-F1_10 (10-Stock News, Seed 42)",32705,72.46,0.5071,0.5062,0.5056,0.5097,0.2505
+All-50 Active News Days,"LSTM-F1_All50 (All-50 News, Seed 42)",32705,72.46,0.5108,0.51,0.5095,0.5116,0.2504
+All-50 No-News Days,XGB-F0 (Price-Only),12431,27.54,0.5011,0.5018,0.5,0.5052,0.2503
+All-50 No-News Days,XGB-F1_10 (10-Stock News),12431,27.54,0.5076,0.5099,0.5097,0.5098,0.2557
+All-50 No-News Days,XGB-F1_All50 (All-50 News),12431,27.54,0.5061,0.5088,0.5087,0.5121,0.2555
+All-50 No-News Days,LR-F0 (Price-Only),12431,27.54,0.5102,0.5086,0.508,0.507,0.2506
+All-50 No-News Days,LR-F1_10 (10-Stock News),12431,27.54,0.5097,0.5074,0.5068,0.5064,0.2507
+All-50 No-News Days,LR-F1_All50 (All-50 News),12431,27.54,0.5071,0.5054,0.5054,0.5048,0.2507
+All-50 No-News Days,"LSTM-F0 (Price-Only, Seed 42)",12431,27.54,0.5089,0.5114,0.5109,0.515,0.2502
+All-50 No-News Days,"LSTM-F1_10 (10-Stock News, Seed 42)",12431,27.54,0.503,0.5059,0.5055,0.5073,0.2505
+All-50 No-News Days,"LSTM-F1_All50 (All-50 News, Seed 42)",12431,27.54,0.5033,0.5054,0.5053,0.5078,0.2504
+Original 10 Heavyweights,XGB-F0 (Price-Only),9142,20.25,0.4968,0.4958,0.4988,0.5108,0.2503
+Original 10 Heavyweights,XGB-F1_10 (10-Stock News),9142,20.25,0.5062,0.5072,0.5079,0.5174,0.2572
+Original 10 Heavyweights,XGB-F1_All50 (All-50 News),9142,20.25,0.5047,0.5037,0.5044,0.515,0.2558
+Original 10 Heavyweights,LR-F0 (Price-Only),9142,20.25,0.5058,0.5048,0.506,0.51,0.2503
+Original 10 Heavyweights,LR-F1_10 (10-Stock News),9142,20.25,0.504,0.5031,0.5045,0.5077,0.2506
+Original 10 Heavyweights,LR-F1_All50 (All-50 News),9142,20.25,0.5044,0.5034,0.5047,0.511,0.2504
+Original 10 Heavyweights,"LSTM-F0 (Price-Only, Seed 42)",9142,20.25,0.5046,0.5036,0.5047,0.509,0.2504
+Original 10 Heavyweights,"LSTM-F1_10 (10-Stock News, Seed 42)",9142,20.25,0.5093,0.5083,0.5103,0.5122,0.2509
+Original 10 Heavyweights,"LSTM-F1_All50 (All-50 News, Seed 42)",9142,20.25,0.5079,0.5069,0.5079,0.5108,0.2505
+Expanded Constituents,XGB-F0 (Price-Only),35994,79.75,0.5031,0.5029,0.4998,0.5058,0.2502
+Expanded Constituents,XGB-F1_10 (10-Stock News),35994,79.75,0.5032,0.5031,0.5028,0.5067,0.2559
+Expanded Constituents,XGB-F1_All50 (All-50 News),35994,79.75,0.5044,0.5044,0.5041,0.5078,0.2566
+Expanded Constituents,LR-F0 (Price-Only),35994,79.75,0.5092,0.5091,0.508,0.5102,0.2505
+Expanded Constituents,LR-F1_10 (10-Stock News),35994,79.75,0.508,0.508,0.5071,0.5098,0.2505
+Expanded Constituents,LR-F1_All50 (All-50 News),35994,79.75,0.5065,0.5064,0.5052,0.5084,0.2507
+Expanded Constituents,"LSTM-F0 (Price-Only, Seed 42)",35994,79.75,0.5112,0.5112,0.5104,0.5163,0.2501
+Expanded Constituents,"LSTM-F1_10 (10-Stock News, Seed 42)",35994,79.75,0.5056,0.5055,0.505,0.5086,0.2504
+Expanded Constituents,"LSTM-F1_All50 (All-50 News, Seed 42)",35994,79.75,0.5093,0.5093,0.5087,0.5105,0.2504
