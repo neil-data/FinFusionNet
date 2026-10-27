@@ -1,0 +1,14 @@
+# FinFusionNet Paper Audit: Claims and Evidence Traceability Matrix
+
+This audit matrix explicitly connects every major claim in the research paper to the empirical codebase, configuration files, and audited results parquets.
+
+| Claim # | Paper Section | Empirical Claim Description | Supporting Repository Evidence | Verification Status |
+|---|---|---|---|---|
+| 1 | Abstract / Sec. 10 | The price-only 2-layer LSTM (`LSTM-F0`) achieves the highest date accuracy (**51.08%**), outperforming all multimodal and sentiment models. | `docs/audit/exp1_exp5_statistical_audit/audited_direction_performance.csv`, `experiments/audit/predictions/lstm_p_predictions.parquet` | **VERIFIED** |
+| 2 | Abstract / Sec. 10 | Multimodal Cross-Attention Net achieved **50.16%** date accuracy, underperforming `LSTM-F0` by **-0.92%** ($p = 0.0430$ date Brier DM; $p = 0.0339$ 0-1 loss DM). | `docs/audit/exp1_exp5_statistical_audit/audited_direction_statistical_significance.csv`, `experiments/experiment_5/predictions/experiment_5_common_cohort_predictions.parquet` | **VERIFIED** |
+| 3 | Sec. 10 / Sec. 11 | Across 8 planned superiority comparisons ($H_1: \text{Lift} > 0$), no sentiment model achieved statistically significant alpha after Holm-Bonferroni correction ($\tilde{p} = 1.0000$). | `audited_direction_statistical_significance.csv` (Row 0-7, column `holm_bonferroni_p`) | **VERIFIED** |
+| 4 | Sec. 7 / Sec. 10 | The historical Exp 5 report claimed a +44.8% RMSE error reduction due to benchmark asymmetry (`volatility_20` close-to-close bias of +0.0331). | `docs/audit/exp1_exp5_statistical_audit/audited_volatility_performance.csv`, `scratch/investigate_inconsistencies.py` | **VERIFIED** |
+| 5 | Sec. 10 | Trailing Parkinson 20d (`parkinson_20`) achieves superior RMSE (**0.1052**) and $R^2$ (**+14.24%**) compared to Cross-Attention Net (RMSE **0.1075**, $R^2$ **+10.38%**; $DM = -1.9515, p = 0.0513$). | `docs/audit/exp1_exp5_statistical_audit/audited_volatility_performance.csv`, `audited_volatility_diebold_mariano.csv` | **VERIFIED** |
+| 6 | Sec. 6 / Sec. 7 | All models evaluated on identical common cohort of **45,136 observations**, **916 trading dates**, and **56 constituents** across 45 monthly expanding folds. | `scratch/inspect_experiments_data.py`, `docs/research_data_extraction/02_DATASET_AND_FEATURES.md` | **VERIFIED** |
+| 7 | Sec. 7 | 15:30 IST Causal Cutoff strictly maps $(15:30_{t-1}, 15:30_t] \to t$, shifting post-15:30 news to $t+1$. | `scripts/process_gnews_all50_finbert.py`, `src/finfusionnet/data/news_cleaner.py` | **VERIFIED** |
+| 8 | Sec. 8 / Sec. 11 | Cross-Attention Net dramatically wins Brier score over XGBoost ($DM = +11.66, p < 10^{-15}$) due to probability shrinkage ($\sigma = 0.027$ vs $0.158$), despite identical discrete accuracy. | `scratch/investigate_inconsistencies.py`, `audited_direction_statistical_significance.csv` | **VERIFIED** |

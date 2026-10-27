@@ -1,0 +1,15 @@
+Metric,Value,Notes
+Market Universe,Nifty 50 Index (NSE India),"Dynamic reconstitution, survivorship-bias-free"
+Total Constituent Tickers,56 unique equity tickers,"Includes additions (TRENT, BEL, SHRIRAMFIN) & deletions (UPL, etc.)"
+Historical Market Window,2019-01-01 to 2026-09-30,"1,920 daily market sessions"
+Warm-up Training Window,2021-01-01 to 2022-12-31,24 months initial training (~500 sessions)
+Walk-Forward Evaluation Window,2023-01-02 to 2026-09-29,45 expanding monthly folds (Protocol B)
+Common Evaluation Cohort Rows,"45,136 observations",100% paired alignment across all models
+Common Evaluation Dates,916 trading dates,Identical out-of-sample test sessions
+Market Covariates,"Nifty 50 (^NSEI), India VIX (^INDIAVIX)","Returns, rolling volatilities, and daily changes"
+News Corpus Source,Google News RSS & GDELT,Query-matched per constituent entity alias
+Cleaned News Articles,"205,687 articles","Deduplicated, filtered, IST timestamped"
+News Information Cutoff,15:30 IST Causal Boundary,"(15:30_{t-1}, 15:30_t] -> session t; post-15:30 -> t+1"
+News Coverage in Cohort,69.70% of ticker-days,"31,458 days with news, 13,678 days without news"
+Direction Target Balance,50.21% Up / 49.79% Down,"22,662 Up sessions vs 22,474 Down sessions"
+Realized Volatility Target,Parkinson (1980) High-Low,"Mean = 0.2024, Std = 0.1135, Median = 0.1741"

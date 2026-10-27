@@ -1,0 +1,252 @@
+\documentclass[10pt,journal,compsoc,twocolumn]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{microtype}
+
+\begin{document}
+
+\title{FinFusionNet: Evaluating Multimodal Temporal Cross-Attention and Financial NLP for Equity Direction and Realized Volatility Forecasting in Indian Markets}
+
+\author{Neil%
+\thanks{Neil is with the Quantitative Machine Learning and Quantitative Finance Research Group (e-mail: neil@finfusionnet.org).}}
+
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+We investigate whether multimodal deep learning---integrating sequential financial market features with domain-specific financial news sentiment via temporal cross-attention---delivers statistically significant out-of-sample predictive alpha in large-cap Indian equities (National Stock Exchange Nifty 50 universe). Using a point-in-time constituent dataset spanning 2019 to 2026, comprising 1,920 market sessions and 205,687 cleaned financial news articles, we implement a strictly causal evaluation pipeline governed by a 15:30 IST news information cutoff, missing-news indicator preservation, and an expanding monthly walk-forward validation protocol (Protocol B, 45 expanding folds, 1-session embargo). Evaluating all candidate architectures on an audited, strictly aligned common evaluation cohort of 45,136 out-of-sample observations across 916 trading dates (2023--2026), we establish two primary empirical conclusions. First, domain-specific news sentiment (ProsusAI FinBERT) and temporal cross-attention fail to produce statistically significant directional alpha over price-only baselines. The top-performing directional model is a simple price-only two-layer LSTM (LSTM-F0) achieving a date-level accuracy of 51.08\% (ROC-AUC 0.5149). In contrast, the proposed multimodal CrossAttentionNet achieves 50.16\% date accuracy, trailing the naive Always-Up baseline (50.34\%) and underperforming the price-only LSTM by -0.92\% ($p = 0.0430$ date-level Brier Diebold--Mariano; $p = 0.0339$ 0--1 loss Diebold--Mariano). Under family-wise Holm--Bonferroni correction across planned comparisons, no sentiment model demonstrates statistically significant positive lift ($\tilde{p} = 1.0000$). Second, we demonstrate that early reports claiming a +44.8\% error reduction in volatility forecasting were an artifact of benchmark asymmetry caused by evaluating intraday Parkinson high-low volatility forecasts against close-to-close trailing moving averages carrying an intrinsic $+0.0331$ (+16.3\%) overnight jump bias. When evaluated against a fair, like-for-like trailing 20-day Parkinson realized volatility benchmark, the simple moving-average benchmark outperforms the multimodal neural network on mean squared error: Trailing Parkinson 20d achieves an RMSE of 0.1052 and out-of-sample $R^2$ of +14.24\%, compared to 0.1075 and +10.38\% for Cross-Attention Net ($DM = -1.9515, p = 0.0513$). Finally, we show that cross-attention produces a dramatic statistical improvement in probability calibration (Brier score 0.2506 vs 0.2568 for XGBoost, $DM = +11.66, p < 10^{-15}$) via probability shrinkage toward empirical base rates, despite offering zero improvement in discrete directional classification. Our findings provide a rigorous, audited empirical benchmark and highlight the critical necessity of point-in-time constituent handling, strict information cutoffs, and benchmark symmetry in financial machine learning.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Multimodal Deep Learning, Financial Time-Series Forecasting, Temporal Cross-Attention, Financial NLP, Realized Volatility, Parkinson Estimator, Walk-Forward Validation, Nifty 50.
+\end{IEEEkeywords}}
+
+\maketitle
+\IEEEdisplaynontitleabstractindextext
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+\IEEEPARstart{A}{ccurate} out-of-sample forecasting of equity price movements and future volatility remains one of the foundational challenges in financial economics and quantitative machine learning. According to the semi-strong form of the Efficient Market Hypothesis \cite{fama1970efficient}, asset prices rapidly reflect all publicly available information, implying that abnormal predictive returns from historical data should be economically negligible. Nonetheless, a substantial body of empirical literature has sought to extract incremental predictive signals by moving beyond historical price-volume series to incorporate unstructured textual data from financial news, regulatory filings, and social media \cite{tetlock2007giving, bollen2011twitter, ding2015deep}.
+
+Recent advances in natural language processing (NLP)---most notably transformer-based language representations such as BERT \cite{devlin2018bert} and domain-specific adaptations such as FinBERT \cite{araci2019finbert}---have catalyzed widespread efforts to build multimodal financial forecasting architectures. These systems endeavor to learn joint representations that capture both continuous quantitative market microstructure dynamics and qualitative event-driven shocks. Simultaneously, attention mechanisms \cite{vaswani2017attention} have emerged as the standard paradigm for cross-modal alignment, theoretically enabling neural networks to dynamically attend to relevant news events during volatile market regimes while ignoring uninformative background noise.
+
+Despite enthusiastic claims in the recent academic literature, empirical financial machine learning is beset by widespread reproducibility challenges and methodological pitfalls \cite{lopezdeprado2018advances}. Reported outperformance in multimodal financial models frequently stems from subtle, pervasive forms of data leakage, including:
+\begin{enumerate}
+    \item \textbf{Information Cutoff Violations}: Incorporating news articles published after market close or during evening hours into the same day's feature vector, creating lookahead bias.
+    \item \textbf{Improper Validation Schemes}: Utilizing random train-test splits or non-embargoed cross-validation on serially correlated financial time series.
+    \item \textbf{Survivorship Bias}: Conditioning stock universes on contemporary index constituents, omitting historical deletions.
+    \item \textbf{Benchmark Asymmetry}: Comparing sophisticated neural estimators against misaligned or unfairly parameterized baselines.
+    \item \textbf{Distribution Distortions in Missing Data}: Artificially imputing days with no news as ``neutral sentiment'', corrupting the true conditional probability distribution of news arrival.
+\end{enumerate}
+
+In this study, we present \textbf{FinFusionNet}, an end-to-end multimodal deep learning and quantitative evaluation framework specifically engineered to address these methodological challenges in the Indian equity market (National Stock Exchange Nifty 50 index universe). We develop a dual-head temporal cross-attention architecture (\texttt{CrossAttentionNet}) combining historical price sequences with sparse daily FinBERT news representations, evaluated via a rigorous expanding-window walk-forward protocol (\textbf{Protocol B}, 45 expanding monthly folds, 24-month initial warm-up, 1-session embargo).
+
+\section{Related Work}
+\subsection{Financial Time-Series Forecasting}
+The application of machine learning to financial asset pricing and market forecasting has transitioned from classical econometric models (e.g., ARIMA, GARCH) to nonlinear statistical learners. Krauss et al. \cite{krauss2017deep} examined gradient-boosted trees, random forests, and deep neural networks on S\&P 500 constituents, finding that ensemble tree methods demonstrated strong empirical stability. Gu et al. \cite{gu2020empirical} conducted a landmark empirical study across US equities, proving that shallow neural networks and gradient boosting machines \cite{chen2016xgboost, friedman2001greedy} significantly outperform linear asset pricing models by capturing complex predictor interactions and macroeconomic regime shifts.
+
+Recurrent neural networks, specifically Long Short-Term Memory networks (LSTM) \cite{hochreiter1997lstm}, have become a standard benchmark for financial sequence modeling due to their gating mechanisms that mitigate vanishing gradients over extended lookback horizons. However, financial sequences exhibit an exceptionally low signal-to-noise ratio, making high-capacity sequential models susceptible to overfitting spurious microstructure patterns unless heavily regularized.
+
+\subsection{Financial Sentiment Analysis}
+Early financial text mining relied heavily on bag-of-words approaches and sentiment lexicons, such as VADER \cite{hutto2014vader}. While computationally efficient, rule-based lexicons struggle with domain-specific financial syntax, negation, and context. To overcome these constraints, Araci \cite{araci2019finbert} introduced FinBERT, a domain-adapted BERT model pre-trained on large-scale financial corpora. FinBERT achieves superior performance on financial sentiment classification benchmarks by learning contextual embeddings tuned to corporate discourse. Nevertheless, whether these static textual sentiment scores translate into out-of-sample trading alpha when integrated into dynamic market forecasting systems remains an active subject of empirical debate.
+
+\subsection{Realized Volatility Modeling}
+Realized volatility estimation traditionally relies on close-to-close squared returns. However, discrete close-to-close returns ignore intraday price extremes and suffer from high sampling variance. Parkinson \cite{parkinson1980extreme} developed the extreme value high-low volatility estimator, proving that the intraday high-low price range provides an estimator that is up to five times more efficient than close-to-close variance under geometric Brownian motion. Garman \& Klass \cite{garman1980estimation} further extended this approach to incorporate opening and closing prices. When training neural networks to predict next-day realized volatility, aligning the model's loss function and historical benchmarks to the exact target estimator is critical to prevent bias.
+
+\section{Dataset and Universe Construction}
+\subsection{Market Universe and Point-in-Time Integrity}
+The study evaluates the constituents of the \textbf{Nifty 50 Index}, the flagship benchmark of the National Stock Exchange of India (NSE). To prevent survivorship bias, we construct a point-in-time constituent history tracking all additions and deletions across the historical window (2019-01-01 to 2026-09-30, comprising 1,920 trading sessions). The resulting universe encompasses \textbf{56 unique equity tickers}, including historical deletions (e.g., UPL, SHREECEM) and contemporary inclusions (e.g., TRENT, BEL, SHRIRAMFIN).
+
+Daily split- and dividend-adjusted OHLCV price series were collected via Yahoo Finance. Macroeconomic context is captured via two market-level series: the Nifty 50 Index (\verb|^NSEI|) and the India Volatility Index (\verb|^INDIAVIX|). All market dates conform strictly to official NSE trading calendars with zero duplicate date records.
+
+\subsection{Financial News Corpus}
+The textual dataset was collected using continuous Google News RSS feeds and GDELT API queries parameterized by canonical corporate entity aliases for each of the 56 constituent companies. The resulting corpus consists of \textbf{205,687 cleaned news articles} spanning January 1, 2020 through September 30, 2026.
+
+\subsection{The 15:30 IST Causal Cutoff Protocol}
+Indian equity markets trade between 09:15 IST and 15:30 IST. To ensure that textual information is strictly known prior to the close of session $t$ (when the forecast for session $t+1$ is formed), the news assignment window $\mathcal{W}_t$ is defined as:
+\begin{equation}
+\mathcal{W}_t = (15:30\text{ IST on } t-1, \quad 15:30\text{ IST on } t]
+\end{equation}
+Any news article published \textbf{after 15:30 IST on day $t$} is shifted to session $t+1$ (available only for predicting returns from $t+1$ to $t+2$). Articles published during non-trading days (weekends, holidays) are aggregated into the next active market session.
+
+\subsection{Missing-News Representation}
+In large-cap equities, company-specific news arrives intermittently. Across the audited evaluation cohort, \textbf{31,458 ticker-days (69.70\%)} possess news coverage, while \textbf{13,678 ticker-days (30.30\%)} have zero articles. 
+
+Converting days without news to neutral sentiment (e.g., compound score 0.0 or neutral probability 1.0) corrupts the data generating process by conflating the \textit{absence of information} with the \textit{presence of neutral news}. FinFusionNet preserves missing-news days: $\text{has\_news} = 0$, $\text{n\_articles} = 0$, while continuous sentiment features remain null during extraction and are handled via dedicated sentinel zero-masking inside neural attention layers.
+
+\subsection{Common Evaluation Cohort}
+To ensure 100\% paired comparison parity across all 10 evaluated models, all metrics, statistical tests, and regime analyses are computed on an identical \textbf{common evaluation cohort}:
+\begin{itemize}
+    \item \textbf{Total Observations}: Exactly \textbf{45,136 ticker-day rows}.
+    \item \textbf{Trading Dates}: Exactly \textbf{916 trading dates} (2023-01-02 to 2026-09-29).
+    \item \textbf{Constituent Breadth}: 56 unique companies.
+    \item \textbf{Walk-Forward Folds}: 45 monthly expanding folds.
+    \item \textbf{Direction Target Balance}: 22,662 Up sessions (50.21\%) vs 22,474 Down sessions (49.79\%).
+\end{itemize}
+
+\section{Feature Engineering and Preprocessing}
+The master feature dataset contains 39 predictive input features, partitioned into four distinct categories:
+\begin{enumerate}
+    \item \textbf{Technical \& Price Features (24 Features)}: 1d, 2d, 5d, 10d, 20d returns; intraday return; high-low range; range position; moving average ratios ($C_t/\text{SMA}_k(C_t)-1$ for $k \in \{5, 10, 20, 50\}$); 14-day RSI; MACD line, signal, and histogram; 14-day ATR ratio; 20-day Bollinger Band width; 10-day and 20-day annualized close-to-close volatilities; and volume ratios.
+    \item \textbf{Market Context Features (5 Features)}: Nifty 50 1d, 5d, 20d returns; and Nifty 50 10d, 20d rolling volatilities.
+    \item \textbf{News Controls (2 Features)}: Article count $n\_articles$ and binary indicator $has\_news$.
+    \item \textbf{Sentiment Features (8 FinBERT / 5 VADER Features)}: Mean positive, negative, neutral softmax probabilities; sentiment score $P(\text{pos}) - P(\text{neg})$; dispersion; and confidence.
+\end{enumerate}
+
+\subsection{Target Formulations}
+The directional prediction target is formulated as binary next-session price return:
+\begin{equation}
+y_{dir, t} = \mathbb{I}(C_{t+1} > C_t) \in \{0, 1\}
+\end{equation}
+
+The realized volatility regression target is the intraday high-low estimator of Parkinson \cite{parkinson1980extreme}:
+\begin{equation}
+\sigma_{P, t+1} = \sqrt{ \frac{1}{4 \ln 2} \left( \ln \frac{H_{t+1}}{L_{t+1}} \right)^2 \times 252 }
+\end{equation}
+Across the 45,136 evaluation cohort observations, the empirical target distribution has a sample mean of \textbf{0.2024} (20.24\% annualized volatility), standard deviation of \textbf{0.1135}, median of \textbf{0.1741}, and interquartile range of $[0.1284, 0.2435]$.
+
+\section{Methodology}
+\subsection{Proposed Architecture: CrossAttentionNet}
+\texttt{CrossAttentionNet} is a dual-task multimodal deep neural network designed to dynamically fuse sequential market features with sparse financial news representations.
+
+\subsubsection{Temporal Price Encoder}
+Given a price lookback sequence $X_p \in \mathbb{R}^{B \times T \times D_p}$ where batch size $B=64$, sequence length $T=20$, and price dimension $D_p=24$, the temporal price encoder comprises a 2-layer Bidirectional LSTM (BiLSTM):
+\begin{equation}
+H_p = [ \vec{H}_p \parallel \overleftarrow{H}_p ] \in \mathbb{R}^{B \times T \times 128}
+\end{equation}
+where hidden dimension $d_h = 64$ per direction, yielding representation dimension $D_{model} = 128$.
+
+\subsubsection{Temporal News Encoder}
+Given the aligned daily news feature sequence $X_n \in \mathbb{R}^{B \times T \times D_n}$ ($D_n = 8$), a linear projection with layer normalization maps the sentiment representations to the shared embedding space:
+\begin{equation}
+H_n = \text{LayerNorm}(X_n W_{proj} + b_{proj}) \in \mathbb{R}^{B \times T \times 128}
+\end{equation}
+
+\subsubsection{Sentinel-Masked Temporal Cross-Attention}
+Queries ($Q$) are projected from price representations, while Keys ($K$) and Values ($V$) are projected from news representations:
+\begin{equation}
+Q = H_p W_Q, \quad K = H_n W_K, \quad V = H_n W_V
+\end{equation}
+where $W_Q, W_K, W_V \in \mathbb{R}^{128 \times 128}$. We employ multi-head attention with $h=4$ heads, each with dimension $d_k = 32$.
+
+To handle intermittent news, a binary mask $M_{news} \in \{0, 1\}^{B \times T}$ is incorporated. Let $M_{bias}(b, i, j) = 0$ if $M_{news}(b, j) = 1$, and $-10^9$ if $M_{news}(b, j) = 0$. The attention score matrix is given by:
+\begin{equation}
+A = \frac{Q K^T}{\sqrt{d_k}} + M_{bias}
+\end{equation}
+To prevent numerical instability when all $T=20$ timesteps lack news ($M_{news}(b, :) = \mathbf{0}$), a dedicated learned sentinel embedding $e_{sentinel} \in \mathbb{R}^{128}$ is appended to $K$ and $V$. The resulting normalized attention weights and context vectors are:
+\begin{equation}
+\alpha = \text{Softmax}(A), \quad C = \alpha V \in \mathbb{R}^{B \times T \times 128}
+\end{equation}
+
+\subsubsection{Temporal Fusion and Multitask Prediction Heads}
+We extract the final hidden representations at timestep $T=20$:
+\begin{equation}
+h_{fused} = [ H_p[:, T, :] \parallel C[:, T, :] ] \in \mathbb{R}^{B \times 256}
+\end{equation}
+The representation is branched into two dedicated prediction heads:
+\begin{equation}
+\hat{z}_{dir} = W_{d2} \text{ReLU}(W_{d1} h_{fused} + b_{d1}) + b_{d2}, \quad \hat{y}_{dir} = \sigma(\hat{z}_{dir})
+\end{equation}
+\begin{equation}
+\hat{\sigma}_{vol} = W_{v2} \text{ReLU}(W_{v1} h_{fused} + b_{v1}) + b_{v2}
+\end{equation}
+The joint multi-task loss is:
+\begin{equation}
+\mathcal{L}_{total} = \mathcal{L}_{BCE}(\hat{z}_{dir}, y_{dir}) + \lambda \cdot \text{SmoothL1}(\hat{\sigma}_{vol}, \sigma_P), \quad \lambda = 1.0
+\end{equation}
+The model contains \textbf{266,626 trainable parameters}.
+
+\section{Experimental Design}
+\subsection{Protocol B Expanding Walk-Forward Validation}
+To ensure realistic out-of-sample evaluation free from lookahead bias, all experiments strictly adhere to \textbf{Protocol B}:
+\begin{itemize}
+    \item \textbf{Initial Training Window}: 24 calendar months (~500 market sessions).
+    \item \textbf{Step Size}: 1 calendar month (~20--22 market sessions).
+    \item \textbf{Total Expanding Folds}: 45 folds (January 2023 through September 2026).
+    \item \textbf{Embargo Window}: 1 market session between train end and test start.
+    \item \textbf{Preprocessing Fitting}: \texttt{StandardScaler} is fitted strictly on the expanding training fold and applied out-of-sample to test folds.
+\end{itemize}
+
+\subsection{Statistical Evaluation Suite}
+To evaluate forecast differences, we employ:
+\begin{enumerate}
+    \item \textbf{Paired Date-Block Bootstrap}: $B = 10,000$ resamples with block length $L = 10$ trading dates \cite{kunsch1989jackknife}.
+    \item \textbf{Diebold--Mariano Tests with HAC Adjustment}: Date-level loss differentials evaluated with Newey--West HAC standard errors \cite{diebold1995comparing, newey1987simple, harvey1997testing}.
+    \item \textbf{Holm--Bonferroni Correction}: FWER control across planned comparisons \cite{holm1979simple}.
+\end{enumerate}
+
+\section{Results}
+\subsection{Direction Classification Performance}
+Table \ref{tab:classification} reports out-of-sample direction classification metrics across all models on the common evaluation cohort.
+
+\begin{table*}[t]
+\caption{Audited Out-of-Sample Direction Classification Benchmark (Common Cohort: 45,136 Observations, 916 Dates, 45 Expanding Folds)}
+\label{tab:classification}
+\centering
+\small
+\begin{tabular}{llcccccccccc}
+\toprule
+\textbf{Model Configuration} & \textbf{Exp} & \textbf{Date Acc} & \textbf{Pool Acc} & \textbf{Bal Acc} & \textbf{Prec} & \textbf{Rec} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{Brier} & \textbf{LogLoss} & \textbf{Up \%} \\
+\midrule
+\textbf{LSTM-F0 (Price-Only)} & Exp 1 & \textbf{0.5108} & \textbf{0.5096} & \textbf{0.5091} & \textbf{0.5095} & 0.6297 & 0.5633 & \textbf{0.5149} & \textbf{0.2502} & \textbf{0.6935} & 62.07\% \\
+\textbf{LSTM-F1\_VADER} & Exp 3B & 0.5099 & 0.5088 & 0.5084 & 0.5092 & 0.6045 & 0.5528 & 0.5105 & 0.2504 & 0.6940 & 59.62\% \\
+\textbf{LR-F1\_FinBERT} & Exp 4 & 0.5095 & 0.5083 & 0.5077 & 0.5081 & 0.6567 & 0.5729 & 0.5103 & 0.2505 & 0.6943 & 64.91\% \\
+\textbf{LR-F0 (Price-Only)} & Exp 1 & 0.5094 & 0.5082 & 0.5075 & 0.5078 & 0.6724 & 0.5786 & 0.5102 & 0.2505 & 0.6942 & 66.49\% \\
+\textbf{XGB-F1\_VADER} & Exp 3B & 0.5054 & 0.5043 & 0.5040 & 0.5057 & 0.5622 & 0.5325 & 0.5090 & 0.2564 & 0.7069 & 55.82\% \\
+\textbf{LSTM-F1\_FinBERT} & Exp 4 & 0.5053 & 0.5041 & 0.5038 & 0.5054 & 0.5842 & 0.5419 & 0.5092 & 0.2505 & 0.6942 & 58.04\% \\
+\textbf{XGB-F1\_FinBERT} & Exp 4 & 0.5042 & 0.5042 & 0.5039 & 0.5057 & 0.5593 & 0.5311 & 0.5070 & 0.2568 & 0.7076 & 55.53\% \\
+\textit{Baseline: Always-Up} & Base & 0.5034 & 0.5021 & 0.5000 & 0.5021 & \textbf{1.0000} & \textbf{0.6686} & 0.5000 & 0.4979 & 8.0244 & 100.00\% \\
+\textbf{XGB-F0 (Price-Only)} & Exp 1 & 0.5027 & 0.5015 & 0.4996 & 0.5019 & 0.9351 & 0.6532 & 0.5067 & 0.2503 & 0.6937 & 93.55\% \\
+\textbf{Cross-Attention Net} & Exp 5 & 0.5016 & 0.5004 & 0.4996 & 0.5019 & 0.6852 & 0.5794 & 0.5016 & 0.2506 & 0.6943 & 68.56\% \\
+\textit{Baseline: Prev-Day Direction} & Base & 0.4919 & 0.4930 & 0.4930 & 0.4952 & 0.4966 & 0.4959 & 0.4930 & 0.5070 & 8.1722 & 50.36\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Volatility Regression Performance}
+Table \ref{tab:volatility} compares volatility forecasting metrics against historical benchmarks.
+
+\begin{table}[t]
+\caption{Volatility Forecasting Benchmark (Target: Parkinson 1980 High-Low Volatility, Target Mean = 0.2024)}
+\label{tab:volatility}
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model / Benchmark} & \textbf{RMSE} & \textbf{MAE} & \textbf{Bias} & \textbf{Pearson $r$} & \textbf{$R^2$ (\%)} \\
+\midrule
+\textbf{Parkinson 20d (Fair)} & \textbf{0.1052} & 0.0695 & \textbf{+0.0003} & 0.3979 & \textbf{+14.24\%} \\
+\textbf{Parkinson 10d (Fair)} & 0.1058 & 0.0700 & +0.0003 & 0.4084 & +13.13\% \\
+\textbf{Parkinson 5d (Fair)} & 0.1066 & 0.0708 & +0.0002 & \textbf{0.4301} & +11.89\% \\
+\textbf{Cross-Attention Net} & 0.1075 & \textbf{0.0686} & -0.0089 & 0.3369 & +10.38\% \\
+\textit{Expanding Mean Vol} & 0.1135 & 0.0751 & 0.0000 & 0.0000 & 0.00\% \\
+\textit{Parkinson 1d} & 0.1241 & 0.0839 & -0.0001 & 0.4057 & -19.38\% \\
+\textit{Close-to-Close 20d (Biased)} & 0.1322 & 0.0900 & +0.0331 & 0.3225 & -35.58\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Statistical Audit Findings}
+\begin{itemize}
+    \item \textbf{Direction Alpha}: Price-only LSTM outperforms Cross-Attention Net by $+0.92\%$ with date-level DM Brier $p = 0.0430$ and 0--1 loss $p = 0.0339$. Under Holm--Bonferroni correction, no multimodal model exhibits positive alpha ($\tilde{p} = 1.0000$).
+    \item \textbf{Volatility Alpha}: Trailing Parkinson 20d outperforms Cross-Attention Net on Date-Level MSE with $DM = -1.9515$ ($p = 0.0513$).
+    \item \textbf{Probability Calibration}: Cross-Attention Net achieves Brier score 0.2506 versus 0.2568 for XGBoost ($DM = +11.66, p < 10^{-15}$) due to probability shrinkage, not directional timing.
+\end{itemize}
+
+\section{Discussion and Limitations}
+Our empirical findings demonstrate that incorporating domain-specific FinBERT news sentiment does not produce directional alpha in liquid large-cap equities when evaluated under strict 15:30 IST causal cutoffs and expanding walk-forward validation. Furthermore, complex cross-attention networks do not surpass simple autoregressive Parkinson moving averages on squared error. These findings highlight the critical importance of benchmark symmetry and leakage prevention in quantitative research.
+
+Limitations include the daily frequency of observations, reliance on news headlines rather than full-text disclosures, and evaluation focused on the Indian equity market.
+
+\section{Conclusion}
+FinFusionNet provides an audited empirical benchmark for multimodal financial machine learning. Our negative results demonstrate that news sentiment signals provide negligible incremental directional value over sequential price-only baselines in large-cap equities. Symmetrical benchmarking and strict causal boundaries remain indispensable safeguards against false discoveries.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references/references}
+
+\end{document}

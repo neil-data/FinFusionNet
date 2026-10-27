@@ -1,0 +1,6 @@
+Experiment,Models,Input_Dim,Lookback,Target,Loss,Key_Hyperparameters
+Exp 1: Price-Only Baselines (F0),"XGBoost, Logistic Regression, 2-Layer LSTM",24 Technical Features,T=20 days,Direction (1d),LogLoss / BCE,"LR: C=1.0, L2; XGB: depth=4, n=100, lr=0.05; LSTM: h=64, 2 layers, Adam lr=1e-3"
+Exp 2: Market Context Augmentation,"XGBoost, Logistic Regression, LSTM",24 Price + 5 Macro Features (D=29),T=20 days,Direction (1d),LogLoss / BCE,"Macro: Nifty return (1d, 5d, 20d), Nifty vol (10d, 20d); Same model architectures"
+Exp 3 & 3B: Lexicon Sentiment Fusion,"XGB-F1_VADER, LSTM-F1_VADER",Price + 5 VADER + 2 News Controls (D=31),T=20 days,Direction (1d),LogLoss / BCE,"VADER compound, pos, neg, neu, dispersion; has_news & n_articles controls"
+Exp 4: FinBERT Early Concatenation,"XGB-F1_FinBERT, LR-F1_FinBERT, LSTM-F1_FinBERT",Price + 6 FinBERT + 2 Controls (D=32),T=20 days,Direction (1d),LogLoss / BCE,"ProsusAI FinBERT: pos, neg, neu softmax, sentiment score, dispersion, confidence"
+Exp 5: Temporal Cross-Attention Net,CrossAttentionNet (Dual-Head Multimodal),Price (24d) + News (8d),T=20 days,Direction + Parkinson Volatility,BCE + 1.0 * Smooth L1,"BiLSTM Price Enc (h=64x2=128), News Proj (8->128), 4-head Cross-Attn, Sentinel Masking, AdamW lr=5e-4"
