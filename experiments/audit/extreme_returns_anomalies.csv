@@ -1,0 +1,19 @@
+ticker,date,daily_return,anomaly_type
+ADANIENT,2020-08-25,0.2366,>20% price move
+ADANIENT,2023-02-01,-0.282,>20% price move
+ADANIENT,2023-02-02,-0.267,>20% price move
+ADANIENT,2023-02-08,0.2004,>20% price move
+ADANIENT,2024-11-21,-0.2261,>20% price move
+ADANIPORTS,2024-06-04,-0.2115,>20% price move
+AXISBANK,2020-03-23,-0.2791,>20% price move
+BAJAJFINSV,2020-03-23,-0.2586,>20% price move
+BAJFINANCE,2020-03-23,-0.2323,>20% price move
+INDUSINDBK,2020-03-18,-0.2373,>20% price move
+INDUSINDBK,2020-03-23,-0.2359,>20% price move
+INDUSINDBK,2020-03-26,0.4467,>20% price move
+INDUSINDBK,2020-04-07,0.2256,>20% price move
+INDUSINDBK,2025-03-11,-0.2716,>20% price move
+SHRIRAMFIN,2020-03-23,-0.2218,>20% price move
+TATAMOTORS,2021-10-13,0.2045,>20% price move
+TATAMOTORS,2025-10-14,-0.4015,>20% price move
+TRENT,2026-01-01,-0.3305,>20% price move

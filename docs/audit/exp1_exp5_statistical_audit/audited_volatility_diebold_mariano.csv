@@ -1,0 +1,13 @@
+benchmark,metric,mean_loss_diff_date,date_level_dm_stat,date_level_p_val,better_model_date,pooled_dm_stat,pooled_p_val
+Trailing Parkinson 20d (Fair),MSE (Squared Error),-0.000497,-1.9515,0.05130133073674181,Benchmark,-4.3941,1.1123088983433504e-05
+Trailing Parkinson 20d (Fair),MAE (Absolute Error),0.00092,2.1118,0.034974826897043565,Cross-Attention,,
+Trailing Parkinson 10d (Fair),MSE (Squared Error),-0.000354,-0.9768,0.3289441219275706,Benchmark,-2.3198,0.020349700253774916
+Trailing Parkinson 10d (Fair),MAE (Absolute Error),0.001421,2.1022,0.03581196984577195,Cross-Attention,,
+Trailing Parkinson 5d (Fair),MSE (Squared Error),-0.000199,-0.3994,0.6897233952503332,Benchmark,-0.9891,0.3226086183201453
+Trailing Parkinson 5d (Fair),MAE (Absolute Error),0.002253,2.9819,0.002940398832079527,Cross-Attention,,
+Trailing Parkinson 1d (Yesterday),MSE (Squared Error),0.003836,8.1879,8.881784197001252e-16,Cross-Attention,15.2279,0.0
+Trailing Parkinson 1d (Yesterday),MAE (Absolute Error),0.01534,19.5754,0.0,Cross-Attention,,
+Trailing Close-to-Close 20d,MSE (Squared Error),0.005903,6.4544,1.7601475832407232e-10,Cross-Attention,19.4873,0.0
+Trailing Close-to-Close 20d,MAE (Absolute Error),0.021291,13.3333,0.0,Cross-Attention,,
+Trailing Close-to-Close 10d,MSE (Squared Error),0.00794,6.1697,1.02649644340147e-09,Cross-Attention,19.5838,0.0
+Trailing Close-to-Close 10d,MAE (Absolute Error),0.024002,13.2043,0.0,Cross-Attention,,

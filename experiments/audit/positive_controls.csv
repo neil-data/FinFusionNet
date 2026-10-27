@@ -1,0 +1,3 @@
+test_type,description,date_level_acc,pooled_acc,roc_auc,expected_benchmark
+perfect_leak_canary,True next-day direction feature,1.0,1.0,1.0,1.0
+weak_ar1_recovery,Simulated AR(1) process with rho=0.20,0.5665,0.5665,0.5826,0.5641

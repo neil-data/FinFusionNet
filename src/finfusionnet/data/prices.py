@@ -12,9 +12,16 @@ import numpy as np
 import yfinance as yf
 
 
+TICKER_YFINANCE_MAP = {
+    "TATAMOTORS": "TMPV.NS",
+}
+
+
 def ticker_to_yfinance_symbol(ticker: str) -> str:
-    """Map project ticker to Yahoo Finance symbol (e.g. RELIANCE -> RELIANCE.NS, ^NSEI -> ^NSEI)."""
+    """Map project ticker to Yahoo Finance symbol (e.g. RELIANCE -> RELIANCE.NS, ^NSEI -> ^NSEI, TATAMOTORS -> TMPV.NS)."""
     t = ticker.strip().upper()
+    if t in TICKER_YFINANCE_MAP:
+        return TICKER_YFINANCE_MAP[t]
     if t.startswith("^") or t.endswith(".NS"):
         return t
     # Handle specific Yahoo ticker quirks if any (e.g., M&M -> M&M.NS)

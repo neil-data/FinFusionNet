@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "total_news_records": 4988,
+  "covered_tickers": [
+    "BHARTIARTL",
+    "HDFCBANK",
+    "HINDUNILVR",
+    "ICICIBANK",
+    "INFY",
+    "ITC",
+    "LT",
+    "RELIANCE",
+    "SBIN",
+    "TCS"
+  ],
+  "date_range": "2020-01-01 to 2026-09-30",
+  "schema_complete": true,
+  "ticker_coverage_complete": true,
+  "date_span_valid": true,
+  "missing_data_policy_compliant": true,
+  "active_news_observations": 4988,
+  "mean_articles_on_news_days": 2.36
+}

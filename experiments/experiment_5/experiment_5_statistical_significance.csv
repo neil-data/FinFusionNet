@@ -1,0 +1,6 @@
+comparison,baseline,alternative,acc_diff,bootstrap_95_ci,bootstrap_p_value,mcnemar_wins_diff,mcnemar_p_value,holm_bonferroni_p_value,statistically_significant
+Cross-Attention vs LSTM-F0 (Price-Only),"LSTM-F0 (Price-Only, Exp 1)",Cross-Attention Net (Exp 5),-0.0092,"[-0.0173, 0.0001]",0.9732,-63,0.0327,1.0,False
+Cross-Attention vs LSTM-F1_FinBERT (Concat),"LSTM-F1_FinBERT (Concatenation, Exp 4)",Cross-Attention Net (Exp 5),-0.0037,"[-0.0112, 0.0060]",0.7394,-17,0.5834,1.0,False
+Cross-Attention vs LSTM-F1_VADER,LSTM-F1_VADER (Exp 3B),Cross-Attention Net (Exp 5),-0.0083,"[-0.0159, 0.0012]",0.9555,-43,0.147,1.0,False
+Cross-Attention vs XGB-F0 (Price-Only),"XGB-F0 (Price-Only, Exp 1)",Cross-Attention Net (Exp 5),-0.0011,"[-0.0116, 0.0088]",0.5957,-15,0.6289,1.0,False
+Cross-Attention vs XGB-F1_FinBERT,XGB-F1_FinBERT (Exp 4),Cross-Attention Net (Exp 5),-0.0026,"[-0.0115, 0.0077]",0.6584,-17,0.5856,1.0,False

@@ -49,3 +49,6 @@ data/interim/*
 data/processed/*
 !data/processed/**/.gitkeep
 *.parquet
+
+# Scratch directory
+scratch/

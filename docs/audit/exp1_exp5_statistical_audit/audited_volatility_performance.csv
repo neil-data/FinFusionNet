@@ -1,0 +1,9 @@
+model_benchmark,rmse,mae,bias,pearson_r,oos_r2_pct
+Cross-Attention Net (Exp 5),0.1075,0.0686,-0.0089,0.3369,10.38
+Trailing Parkinson 20d (Fair Benchmark),0.1052,0.0695,0.0003,0.3979,14.24
+Trailing Parkinson 10d (Fair Benchmark),0.1058,0.07,0.0003,0.4084,13.13
+Trailing Parkinson 5d (Fair Benchmark),0.1066,0.0708,0.0002,0.4301,11.89
+Trailing Parkinson 1d (Yesterday Vol),0.1241,0.0839,-0.0001,0.4057,-19.38
+Expanding Historical Mean Vol,0.1135,0.0751,0.0,0.0,0.0
+Trailing Close-to-Close 20d (Exp5 Baseline),0.1322,0.09,0.0331,0.3225,-35.58
+Trailing Close-to-Close 10d (Exp5 Baseline),0.1397,0.0927,0.0259,0.3188,-51.29

@@ -1,0 +1,20 @@
+experiment,model_name,task,target_variable,date_level_acc,pooled_acc,balanced_acc,precision,recall,f1_score,roc_auc,brier_score,log_loss,predicted_up_share,rmse,mae,bias,pearson_r,oos_r2_pct
+Exp 5,Cross-Attention Net,Direction Classification,direction_1d,0.5016,0.5004,0.4996,0.5019,0.6852,0.5794,0.5016,0.2506,0.6943,0.6856,,,,,
+Exp 4,LSTM-F1 (FinBERT Concat),Direction Classification,direction_1d,0.5053,0.5041,0.5038,0.5054,0.5842,0.5419,0.5092,0.2505,0.6942,0.5804,,,,,
+Exp 3B,LSTM-F1 (VADER),Direction Classification,direction_1d,0.5099,0.5088,0.5084,0.5092,0.6045,0.5528,0.5105,0.2504,0.694,0.5962,,,,,
+Exp 1,LSTM-F0 (Price-Only),Direction Classification,direction_1d,0.5108,0.5096,0.5091,0.5095,0.6297,0.5633,0.5149,0.2502,0.6935,0.6207,,,,,
+Exp 4,XGB-F1 (FinBERT Concat),Direction Classification,direction_1d,0.5042,0.5042,0.5039,0.5057,0.5593,0.5311,0.507,0.2568,0.7076,0.5553,,,,,
+Exp 3B,XGB-F1 (VADER),Direction Classification,direction_1d,0.5054,0.5043,0.504,0.5057,0.5622,0.5325,0.509,0.2564,0.7069,0.5582,,,,,
+Exp 1,XGB-F0 (Price-Only),Direction Classification,direction_1d,0.5027,0.5015,0.4996,0.5019,0.9351,0.6532,0.5067,0.2503,0.6937,0.9355,,,,,
+Exp 4,LR-F1 (FinBERT Concat),Direction Classification,direction_1d,0.5095,0.5083,0.5077,0.5081,0.6567,0.5729,0.5103,0.2505,0.6943,0.6491,,,,,
+Exp 1,LR-F0 (Price-Only),Direction Classification,direction_1d,0.5094,0.5082,0.5075,0.5078,0.6724,0.5786,0.5102,0.2505,0.6942,0.6649,,,,,
+Baseline,Always-Up,Direction Classification,direction_1d,0.5034,0.5021,0.5,0.5021,1.0,0.6686,0.5,0.4979,8.0244,1.0,,,,,
+Baseline,Prev-Day Direction,Direction Classification,direction_1d,0.4919,0.493,0.493,0.4952,0.4966,0.4959,0.493,0.507,8.1722,0.5036,,,,,
+Exp 5,Cross-Attention Net,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1075,0.0686,-0.0089,0.3369,10.38
+Benchmark,Trailing Parkinson 20d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1052,0.0695,0.0003,0.3979,14.24
+Benchmark,Trailing Parkinson 10d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1058,0.07,0.0003,0.4084,13.13
+Benchmark,Trailing Parkinson 5d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1066,0.0708,0.0002,0.4301,11.89
+Benchmark,Trailing Parkinson 1d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1241,0.0839,-0.0001,0.4057,-19.38
+Benchmark,Expanding Mean Volatility,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1135,0.0751,0.0,0.0,0.0
+Exp 5 Baseline,Trailing Close-to-Close 20d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1322,0.09,0.0331,0.3225,-35.58
+Exp 5 Baseline,Trailing Close-to-Close 10d,Volatility Regression,parkinson_1d_target,,,,,,,,,,,0.1397,0.0927,0.0259,0.3188,-51.29

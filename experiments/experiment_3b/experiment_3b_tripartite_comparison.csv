@@ -1,0 +1,10 @@
+model_configuration,date_level_acc,pooled_acc,balanced_acc,roc_auc,brier_score
+XGB-F0 (Price-Only),0.5027,0.5015,0.4996,0.5067,0.2503
+XGB-F1_10 (10-Stock News),0.503,0.5039,0.5037,0.5086,0.2562
+XGB-F1_All50 (All-50 News),0.5054,0.5043,0.504,0.509,0.2564
+LR-F0 (Price-Only),0.5094,0.5082,0.5075,0.5102,0.2505
+LR-F1_10 (10-Stock News),0.5081,0.507,0.5064,0.5091,0.2506
+LR-F1_All50 (All-50 News),0.5069,0.5058,0.5051,0.5089,0.2506
+"LSTM-F0 (Price-Only, Seed 42)",0.5108,0.5096,0.5091,0.5149,0.2502
+"LSTM-F1_10 (10-Stock News, Seed 42)",0.5072,0.5061,0.5056,0.5091,0.2505
+"LSTM-F1_All50 (All-50 News, Seed 42)",0.5099,0.5088,0.5084,0.5105,0.2504

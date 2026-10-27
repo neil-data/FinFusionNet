@@ -1,0 +1,21 @@
+subgroup,n_obs,pct_of_total,model_configuration,date_level_acc,pooled_acc,balanced_acc,roc_auc,brier_score,cross_attn_vol_rmse,cross_attn_vol_mae
+Active News Days,32705,72.5,Cross-Attention Net (Exp 5),0.5011,0.5001,0.4992,0.504,0.2505,0.1105,0.0693
+Active News Days,32705,72.5,LSTM-F1_FinBERT (Exp 4),0.5071,0.506,0.5056,0.5114,0.2505,0.1105,0.0693
+Active News Days,32705,72.5,"LSTM-F0 (Price-Only, Exp 1)",0.5098,0.509,0.5084,0.5149,0.2502,0.1105,0.0693
+Active News Days,32705,72.5,XGB-F1_FinBERT (Exp 4),0.5048,0.5039,0.5036,0.507,0.2571,0.1105,0.0693
+Active News Days,32705,72.5,"XGB-F0 (Price-Only, Exp 1)",0.5032,0.5013,0.4994,0.5072,0.2502,0.1105,0.0693
+No-News Days,12431,27.5,Cross-Attention Net (Exp 5),0.5022,0.5013,0.5007,0.4954,0.2509,0.099,0.0668
+No-News Days,12431,27.5,LSTM-F1_FinBERT (Exp 4),0.4975,0.4992,0.499,0.5033,0.2506,0.099,0.0668
+No-News Days,12431,27.5,"LSTM-F0 (Price-Only, Exp 1)",0.5089,0.5114,0.5109,0.515,0.2502,0.099,0.0668
+No-News Days,12431,27.5,XGB-F1_FinBERT (Exp 4),0.501,0.505,0.5049,0.507,0.256,0.099,0.0668
+No-News Days,12431,27.5,"XGB-F0 (Price-Only, Exp 1)",0.5011,0.5018,0.5,0.5052,0.2503,0.099,0.0668
+Original 10 Heavyweights,9142,20.3,Cross-Attention Net (Exp 5),0.4963,0.4953,0.4967,0.4934,0.2511,0.0856,0.058
+Original 10 Heavyweights,9142,20.3,LSTM-F1_FinBERT (Exp 4),0.508,0.507,0.5078,0.5086,0.2507,0.0856,0.058
+Original 10 Heavyweights,9142,20.3,"LSTM-F0 (Price-Only, Exp 1)",0.5046,0.5036,0.5047,0.509,0.2504,0.0856,0.058
+Original 10 Heavyweights,9142,20.3,XGB-F1_FinBERT (Exp 4),0.5066,0.5066,0.5072,0.5185,0.2553,0.0856,0.058
+Original 10 Heavyweights,9142,20.3,"XGB-F0 (Price-Only, Exp 1)",0.4968,0.4958,0.4988,0.5108,0.2503,0.0856,0.058
+Expanded 40 Stocks,35994,79.7,Cross-Attention Net (Exp 5),0.5019,0.5017,0.5005,0.5038,0.2505,0.1124,0.0713
+Expanded 40 Stocks,35994,79.7,LSTM-F1_FinBERT (Exp 4),0.5035,0.5034,0.5029,0.5094,0.2505,0.1124,0.0713
+Expanded 40 Stocks,35994,79.7,"LSTM-F0 (Price-Only, Exp 1)",0.5112,0.5112,0.5104,0.5163,0.2501,0.1124,0.0713
+Expanded 40 Stocks,35994,79.7,XGB-F1_FinBERT (Exp 4),0.5036,0.5036,0.5033,0.5044,0.2571,0.1124,0.0713
+Expanded 40 Stocks,35994,79.7,"XGB-F0 (Price-Only, Exp 1)",0.5031,0.5029,0.4998,0.5058,0.2502,0.1124,0.0713
