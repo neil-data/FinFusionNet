@@ -1,0 +1,5 @@
+comparison,loss_metric,mean_loss_diff,dm_stat,p_value,better_model,is_significant_05
+Cross-Attn vs Trailing Volatility 20,Squared Error (MSE),0.005926,19.487,0.0,Cross-Attention,True
+Cross-Attn vs Trailing Volatility 20,Absolute Error (MAE),0.021373,57.6109,0.0,Cross-Attention,True
+Cross-Attn vs Trailing Volatility 10,Squared Error (MSE),0.007952,19.5836,0.0,Cross-Attention,True
+Cross-Attn vs Trailing Volatility 10,Absolute Error (MAE),0.024071,57.0042,0.0,Cross-Attention,True

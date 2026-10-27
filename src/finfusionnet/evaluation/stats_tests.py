@@ -170,3 +170,80 @@ def date_level_mcnemar_test(
         "ties": int(ties),
         "p_value": p_val,
     }
+
+
+def diebold_mariano_test(
+    actual: np.ndarray,
+    pred_model_a: np.ndarray,
+    pred_model_b: np.ndarray,
+    loss_type: str = "squared",
+    h: int = 1,
+) -> Dict[str, Union[float, bool]]:
+    """Diebold-Mariano (1995) test for comparing predictive accuracy of two forecasts.
+
+    loss_type: "squared" (MSE) or "absolute" (MAE).
+    h: forecast horizon (default 1 for next-session).
+
+    Tests H0: E[d_t] = 0 (equal predictive accuracy)
+    vs   H1: E[d_t] != 0 (differing predictive accuracy).
+    d_t = Loss(e_A,t) - Loss(e_B,t).
+    Negative d_t indicates model A has lower loss (superior accuracy).
+    """
+    y = np.asarray(actual)
+    y_a = np.asarray(pred_model_a)
+    y_b = np.asarray(pred_model_b)
+
+    valid_mask = np.isfinite(y) & np.isfinite(y_a) & np.isfinite(y_b)
+    y = y[valid_mask]
+    y_a = y_a[valid_mask]
+    y_b = y_b[valid_mask]
+
+    T = len(y)
+    if T < 2:
+        return {"dm_stat": 0.0, "p_value": 1.0, "mean_loss_diff": 0.0, "is_significant": False}
+
+    e_a = y - y_a
+    e_b = y - y_b
+
+    if loss_type == "squared":
+        d = (e_a ** 2) - (e_b ** 2)
+    elif loss_type == "absolute":
+        d = np.abs(e_a) - np.abs(e_b)
+    else:
+        raise ValueError(f"Unknown loss_type: {loss_type}")
+
+    d_bar = float(np.mean(d))
+
+    # Auto-covariance estimation with Bartlett kernel (Newey-West) up to lag h-1
+    gamma0 = float(np.var(d, ddof=1))
+    var_d = gamma0
+    for k in range(1, h):
+        gamma_k = float(np.cov(d[:-k], d[k:])[0, 1])
+        weight = 1.0 - (k / h)
+        var_d += 2.0 * weight * gamma_k
+
+    var_d_bar = max(var_d / T, 1e-12)
+    dm_stat = d_bar / np.sqrt(var_d_bar)
+
+    # Harvey, Leybourne, Newbold (1997) small-sample modification
+    hln_factor = np.sqrt((T + 1 - 2 * h + (h * (h - 1)) / T) / T)
+    dm_stat_adj = float(dm_stat * hln_factor)
+
+    p_value = float(2.0 * (1.0 - stats.t.cdf(np.abs(dm_stat_adj), df=T - 1)))
+    is_sig = bool(p_value < 0.05)
+    if np.isclose(d_bar, 0.0):
+        better_model = "equal"
+    elif d_bar < 0:
+        better_model = "model_a"
+    else:
+        better_model = "model_b"
+
+    return {
+        "dm_stat": dm_stat_adj,
+        "p_value": p_value,
+        "mean_loss_diff": d_bar,
+        "better_model": better_model,
+        "loss_type": loss_type,
+        "is_significant": is_sig,
+        "sample_size": T,
+    }

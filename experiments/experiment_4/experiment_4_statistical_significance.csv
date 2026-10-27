@@ -1,0 +1,7 @@
+comparison,baseline,alternative,acc_diff,bootstrap_95_ci,bootstrap_p_value,mcnemar_wins_diff,mcnemar_p_value,holm_bonferroni_p_value,statistically_significant
+XGB: FinBERT vs Price-Only,XGB-F0 (Price-Only),XGB-F1_FinBERT (All-50 FinBERT),0.0015,"[-0.0116, 0.0130]",0.4535,1,1.0,1.0,False
+LR: FinBERT vs Price-Only,LR-F0 (Price-Only),LR-F1_FinBERT (All-50 FinBERT),0.0001,"[-0.0032, 0.0030]",0.5456,-17,0.5614,1.0,False
+LSTM: FinBERT vs Price-Only,"LSTM-F0 (Price-Only, Seed 42)","LSTM-F1_FinBERT (All-50 FinBERT, Seed 42)",-0.0055,"[-0.0116, 0.0000]",0.9741,-33,0.2588,1.0,False
+XGB: FinBERT vs VADER News,XGB-F1_VADER (All-50 VADER),XGB-F1_FinBERT (All-50 FinBERT),-0.0011,"[-0.0063, 0.0041]",0.632,9,0.7775,1.0,False
+LR: FinBERT vs VADER News,LR-F1_VADER (All-50 VADER),LR-F1_FinBERT (All-50 FinBERT),0.0025,"[0.0000, 0.0045]",0.0225,45,0.0865,0.135,False
+LSTM: FinBERT vs VADER News,"LSTM-F1_VADER (All-50 VADER, Seed 42)","LSTM-F1_FinBERT (All-50 FinBERT, Seed 42)",-0.0046,"[-0.0080, -0.0014]",0.9962,-51,0.0691,1.0,False

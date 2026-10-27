@@ -1,524 +1,204 @@
-# FinFusionNet
-
-### Multi-Modal Financial Market Prediction Using Technical Indicators, Deep Learning, and Financial News Sentiment
+# FinFusionNet: Multimodal Financial Machine Learning & Temporal Cross-Attention Framework
 
 <p align="center">
-  <strong>Research Framework for Indian Equity Market Analysis</strong>
+  <strong>An Empirical Investigation into Multimodal Fusion, Financial NLP, and Realized Volatility Forecasting in the Indian Equity Market</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python">
-  <img src="https://img.shields.io/badge/Domain-Financial%20Machine%20Learning-green" alt="Domain">
-  <img src="https://img.shields.io/badge/Models-XGBoost%20%7C%20LSTM-orange" alt="Models">
-  <img src="https://img.shields.io/badge/Status-Research%20in%20Progress-yellow" alt="Status">
-  <img src="https://img.shields.io/badge/Market-India%20%7C%20NIFTY%2050-blue" alt="Market">
+  <img src="https://img.shields.io/badge/Framework-PyTorch%20%7C%20XGBoost-orange" alt="Framework">
+  <img src="https://img.shields.io/badge/Market-India%20%7C%20Nifty%2050-green" alt="Market">
+  <img src="https://img.shields.io/badge/NLP-ProsusAI%20FinBERT%20%7C%20VADER-purple" alt="NLP">
+  <img src="https://img.shields.io/badge/Validation-Protocol%20B%20Expanding%20Walk--Forward-red" alt="Validation">
+  <img src="https://img.shields.io/badge/Status-Audited%20Research%20Extraction-success" alt="Status">
 </p>
 
-## 1. Overview
-FinFusionNet is a research-oriented financial machine learning framework designed to investigate whether combining historical market behaviour with financial news sentiment can improve next-trading-day stock direction prediction.
+---
 
-Traditional technical-analysis-based prediction systems primarily rely on historical price and volume information. However, financial markets also respond to company announcements, economic developments, industry trends, and market-moving news.
+## 1. Executive Summary & Core Research Questions
 
-FinFusionNet explores a multi-modal approach by integrating:
-- **Technical indicators**: Extracting market trends, momentum, volatility, and volume-related patterns.
-- **Machine learning**: Using XGBoost to model structured financial features.
-- **Deep learning**: Using LSTM networks to investigate sequential market behaviour.
-- **News sentiment**: Extracting sentiment signals from historical financial news using VADER and FinBERT.
-- **Feature fusion**: Investigating whether combining technical and sentiment information provides additional predictive value.
+**FinFusionNet** is an academic-grade financial machine learning framework developed to evaluate whether integrating domain-specific financial news representations with sequential market microstructure features delivers statistically significant out-of-sample predictive power in Indian equities (**Nifty 50 index** universe).
 
-The initial research focuses on NIFTY 50 constituent stocks and historical Indian equity market data.
+The project investigates two fundamental empirical research questions:
+1. **Direction Classification (RQ1)**: Does the multimodal fusion of daily financial news headlines (via lexicon scoring or transformer sentiment) with technical indicators produce statistically significant incremental predictive alpha over audited price-only baselines?
+2. **Realized Volatility Regression (RQ2)**: Does a temporal cross-attention mechanism allow a neural network to attend to sparse news shocks and forecast next-day intraday realized volatility (**Parkinson 1980 High-Low estimator**) more accurately than standard autoregressive or moving-average benchmarks?
 
-The objective is not to claim that markets can be predicted with certainty, but to systematically evaluate the predictive contribution of different information sources under a realistic experimental setup.
+### Definitive Empirical Findings (Audited)
+Across **5 experimental phases**, **205,687 cleaned news articles**, **56 unique constituents**, and **45 expanding monthly walk-forward folds** evaluated on an audited common evaluation cohort of **45,136 out-of-sample observations** (916 trading dates, 2023–2026):
 
-## 2. Research Objectives
-FinFusionNet is built around the following research questions:
-- How effectively can technical indicators capture patterns associated with next-day stock direction?
-- Can LSTM models extract useful temporal relationships from historical stock data?
-- Does financial news sentiment provide information beyond conventional technical indicators?
-- How do lexicon-based sentiment models compare with transformer-based financial sentiment models?
-- Does combining technical and sentiment features improve predictive performance?
-- Are observed improvements statistically meaningful and consistent across different evaluation periods?
+1. **Multimodal Alpha Deficit**: Domain-specific sentiment (ProsusAI FinBERT) and temporal cross-attention **fail to produce statistically significant directional alpha** over price-only baselines. The simple price-only 2-layer LSTM (`LSTM-F0`) achieved the highest overall date-level accuracy (**51.08%**). The multimodal `CrossAttentionNet` achieved **50.16%** date accuracy, trailing the naive Always-Up baseline (**50.34%**) and underperforming `LSTM-F0` by **-0.92%** ($p = 0.0430$ date-level Brier DM; $p = 0.0339$ 0-1 loss DM).
+2. **Benchmark Asymmetry Resolution**: Early reports indicating that Cross-Attention Net achieved a "+44.8% error reduction" over baseline volatility were an **artifact of benchmark asymmetry**—the model's intraday Parkinson high-low forecasts were compared against a close-to-close return volatility baseline carrying an intrinsic $+0.0331$ (+16.3%) overnight jump bias. When evaluated against a **fair like-for-like trailing 20-day Parkinson benchmark (`parkinson_20`)**, the simple benchmark outperforms the neural network on squared error ($R^2 = +14.24\%$ vs $+10.38\%$, $DM = -1.9515, p = 0.0513$).
+3. **Probability Calibration vs Decision Accuracy**: Cross-Attention Net with sigmoid output shrinks probabilities tightly around 0.50 ($\sigma = 0.027, \text{Brier} = 0.2506$), achieving massive statistical superiority on probability calibration over tree-based XGBoost ($\sigma = 0.158, \text{Brier} = 0.2568, DM = +11.66, p < 10^{-15}$), despite having identical discrete directional accuracy (50.16% vs 50.42%, $p = 0.5906$).
 
-### Core research hypothesis
-> Combining technical market information with financial news sentiment may provide additional predictive information compared with using technical indicators alone.
+---
 
-This hypothesis will be evaluated through controlled experiments and out-of-sample validation.
+## 2. Experimental Roadmap
 
-## 3. System Architecture
-```text
-FINFUSIONNET
-│
-├── MARKET DATA                     NEWS DATA
-│   ├── Historical Prices           ├── GDELT GKG 2.0
-│   ├── Data Validation             ├── News Cleaning
-│   └── Technical Indicators        ├── Entity Matching
-│                                   └── Historical Alignment
-│                                            │
-│                                            ▼
-│                                   ┌─────────────────┐
-│                                   │ VADER | FinBERT │
-│                                   └─────────────────┘
-│                                            │
-└───┬────────────────────────────────────────┘
-    │
-    ▼
-Feature Aggregation
-    │
-    ▼
-Master Dataset
-    │
-    ▼
-Model Experiments
-    ├── XGBoost
-    ├── LSTM
-    └── FinFusionNet
-    │
-    ▼
-Walk-Forward Testing
-    │
-    ▼
-Statistical Evaluation
-    │
-    ▼
-Research Reports
+```
++---------------------------------------------------------------------------------------------------+
+|                                       FINFUSIONNET PIPELINE                                       |
++---------------------------------------------------------------------------------------------------+
+  |
+  +--> Exp 1: Audited Price-Only Baselines (F0)
+  |    Models: XGBoost, Logistic Regression, 2-Layer LSTM
+  |    Features: 24 technical indicators (returns, SMA ratios, RSI, MACD, Bollinger Bands, ATR, Vol)
+  |    Result: LSTM-F0 establishes state-of-the-art benchmark (51.08% date acc, 0.5149 ROC-AUC).
+  |
+  +--> Exp 2: Market Context Augmentation
+  |    Features: Price features + 5 Macro covariates (Nifty 50 return/volatility, India VIX)
+  |    Result: Marginal +0.05% accuracy shift; firm-specific dynamics dominate broad macro beta.
+  |
+  +--> Exp 3 & 3B: Lexicon News Sentiment Fusion (VADER)
+  |    News Source: Google News RSS feeds (Exp 3: 10-stock pilot; Exp 3B: Full All-50 expansion)
+  |    Features: Price + 5 VADER sentiment features + 2 news controls (has_news, n_articles)
+  |    Result: LSTM-F1_VADER achieved 50.99%; failed to beat price-only LSTM.
+  |
+  +--> Exp 4: Domain-Specific Transformer Concatenation (FinBERT)
+  |    Sentiment Model: ProsusAI FinBERT (softmax probabilities, sentiment score, dispersion)
+  |    Architecture: Early feature concatenation into XGBoost, Logistic Regression, and LSTM
+  |    Result: LSTM-F1_FinBERT reached 50.53%; XGB-F1_FinBERT reached 50.42% (no incremental alpha).
+  |
+  +--> Exp 5: Temporal Cross-Attention Multimodal Network (CrossAttentionNet)
+       Architecture: BiLSTM Price Encoder + Linear News Projection + Sentinel-Masked Cross-Attention
+       Prediction Heads: Dual-task (Direction Classification + Parkinson Realized Volatility Regression)
+       Result: Direction acc 50.16%; Volatility RMSE 0.1075 (fair benchmark parkinson_20 achieves 0.1052).
 ```
 
-FinFusionNet's architecture is modular. Individual components can be tested independently before being combined.
+---
 
-## 4. Data Strategy
+## 3. Audited Performance Results
 
-### 4.1 Historical price data
-The project uses historical daily stock market data for Indian equities.
+All models are evaluated on the identical, audited common evaluation cohort of **45,136 observations** across **916 trading dates** (2023-01-02 to 2026-09-29) and **56 unique constituents** across 45 monthly expanding folds.
 
-| Parameter | Configuration |
-| :--- | :--- |
-| **Market** | Indian equity market |
-| **Primary universe** | Point-in-time NIFTY 50 constituents |
-| **Price warm-up period** | 2020-01-01 to 2026-09-30 |
-| **Modeling period** | 2021-01-01 to 2026-09-30 |
-| **Frequency** | Daily |
-| **Initial data source** | Yahoo Finance |
-| **Validation** | Corporate actions, missing dates, ticker continuity |
+### Direction Classification Benchmark
 
-The additional warm-up period allows technical indicators to be calculated before the modeling window begins.
+| Model Configuration | Experiment | Date Acc | Pooled Acc | Balanced Acc | Precision | Recall | F1 Score | ROC-AUC | Brier Score | Log Loss | Predicted Up % |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **LSTM-F0 (Price-Only)** | Exp 1 | **0.5108** | **0.5096** | **0.5091** | **0.5095** | 0.6297 | 0.5633 | **0.5149** | **0.2502** | **0.6935** | 62.07% |
+| **LSTM-F1_VADER** | Exp 3B | 0.5099 | 0.5088 | 0.5084 | 0.5092 | 0.6045 | 0.5528 | 0.5105 | 0.2504 | 0.6940 | 59.62% |
+| **LR-F1_FinBERT** | Exp 4 | 0.5095 | 0.5083 | 0.5077 | 0.5081 | 0.6567 | 0.5729 | 0.5103 | 0.2505 | 0.6943 | 64.91% |
+| **LR-F0 (Price-Only)** | Exp 1 | 0.5094 | 0.5082 | 0.5075 | 0.5078 | 0.6724 | 0.5786 | 0.5102 | 0.2505 | 0.6942 | 66.49% |
+| **XGB-F1_VADER** | Exp 3B | 0.5054 | 0.5043 | 0.5040 | 0.5057 | 0.5622 | 0.5325 | 0.5090 | 0.2564 | 0.7069 | 55.82% |
+| **LSTM-F1_FinBERT** | Exp 4 | 0.5053 | 0.5041 | 0.5038 | 0.5054 | 0.5842 | 0.5419 | 0.5092 | 0.2505 | 0.6942 | 58.04% |
+| **XGB-F1_FinBERT** | Exp 4 | 0.5042 | 0.5042 | 0.5039 | 0.5057 | 0.5593 | 0.5311 | 0.5070 | 0.2568 | 0.7076 | 55.53% |
+| *Baseline: Always-Up* | Baseline | 0.5034 | 0.5021 | 0.5000 | 0.5021 | **1.0000** | **0.6686** | 0.5000 | 0.4979 | 8.0244 | 100.00% |
+| **XGB-F0 (Price-Only)** | Exp 1 | 0.5027 | 0.5015 | 0.4996 | 0.5019 | 0.9351 | 0.6532 | 0.5067 | 0.2503 | 0.6937 | 93.55% |
+| **Cross-Attention Net** | Exp 5 | 0.5016 | 0.5004 | 0.4996 | 0.5019 | 0.6852 | 0.5794 | 0.5016 | 0.2506 | 0.6943 | 68.56% |
+| *Baseline: Prev-Day Direction* | Baseline | 0.4919 | 0.4930 | 0.4930 | 0.4952 | 0.4966 | 0.4959 | 0.4930 | 0.5070 | 8.1722 | 50.36% |
 
-> [!IMPORTANT]
-> Historical index membership is used to reduce survivorship bias. A stock should only enter the dataset during periods when it was both listed and an index constituent.
+### Volatility Regression Benchmark (Parkinson Target)
 
-A frozen current-constituent universe may also be evaluated separately as a robustness comparison.
+The volatility target is the intraday high-low realized volatility estimator (**Parkinson 1980**):
+$$\sigma_{P, t+1} = \sqrt{\frac{1}{4 \ln 2} \left( \ln \frac{H_{t+1}}{L_{t+1}} \right)^2 \times 252}$$
 
-### 4.2 Financial news data
-The historical news pipeline uses GDELT Global Knowledge Graph (GKG) 2.0 as its primary source.
+| Model / Benchmark | RMSE | MAE | Bias | Pearson $r$ | Out-of-Sample $R^2$ (%) | Date DM vs Cross-Attn (MSE) |
+|---|---|---|---|---|---|---|
+| **Trailing Parkinson 20d (Fair Benchmark)** | **0.1052** | 0.0695 | **+0.0003** | 0.3979 | **+14.24%** | $DM = -1.9515$ ($p = 0.0513$) |
+| **Trailing Parkinson 10d (Fair Benchmark)** | 0.1058 | 0.0700 | +0.0003 | 0.4084 | +13.13% | $DM = -0.9768$ ($p = 0.3289$) |
+| **Trailing Parkinson 5d (Fair Benchmark)** | 0.1066 | 0.0708 | +0.0002 | **0.4301** | +11.89% | $DM = -0.3994$ ($p = 0.6897$) |
+| **Cross-Attention Net (Exp 5)** | 0.1075 | **0.0686** | -0.0089 | 0.3369 | +10.38% | — |
+| *Expanding Historical Mean Vol* | 0.1135 | 0.0751 | 0.0000 | 0.0000 | 0.00% | — |
+| *Trailing Parkinson 1d (Yesterday Vol)* | 0.1241 | 0.0839 | -0.0001 | 0.4057 | -19.38% | $DM = +8.1879$ ($p < 10^{-15}$) |
+| *Trailing Close-to-Close 20d (Exp 5 Baseline)* | 0.1322 | 0.0900 | +0.0331 | 0.3225 | -35.58% | $DM = +6.4544$ ($p = 1.8 \times 10^{-10}$) |
 
-The pipeline is designed to:
-- Extract historical news records.
-- Identify relevant companies through entity aliases.
-- Clean and deduplicate news records.
-- Filter relevant Indian-market coverage.
-- Extract sentiment information.
-- Align news with actual NSE trading sessions.
-- Aggregate news information into ticker-day features.
+---
 
-Historical news extraction will be validated through sample-period pilots before full-scale processing.
+## 4. Methodological Integrity & Leakage Prevention
 
-### 4.3 Company entity matching
-Company names and aliases are used to associate news articles with stock tickers.
+1. **The 15:30 IST Causal Cutoff Protocol**: Indian equities trade from 09:15 to 15:30 IST. For trading session $t$, the allowed news window is strictly $(15:30\text{ IST on } t-1, 15:30\text{ IST on } t]$. Any headline published after 15:30 IST is assigned to session $t+1$. Weekend/holiday news is mapped to the next trading day.
+2. **Missing-News Preservation**: Sparse news is natural in equity markets. Rather than imputing missing days with "neutral" sentiment (which distorts distribution), days without news have `has_news = 0`, `n_articles = 0`, and are masked using dedicated sentinel representations in the attention layer.
+3. **Protocol B Expanding Walk-Forward**: 45 monthly expanding folds with a 24-month initial training window (~500 sessions) and a strict 1-session embargo between training and testing.
+4. **Scaler Fitting**: Preprocessing (`StandardScaler`) is fitted strictly on the expanding training fold and applied out-of-sample to test folds.
+5. **Point-in-Time Universe**: Includes all 56 historical Nifty 50 constituents across the research window (2019–2026), accounting for index additions and deletions without survivorship bias.
 
-For example:
+---
 
-| Ticker | Company / alias examples |
-| :--- | :--- |
-| `RELIANCE` | Reliance Industries, Reliance |
-| `INFY` | Infosys, Infosys Limited |
-| `TCS` | Tata Consultancy Services, TCS |
-| `ETERNAL` | Eternal, Zomato |
-| `TMPV` | Tata Motors, TMPV |
+## 5. Research Data Extraction Deliverables
 
-Ambiguous names require stricter matching rules to reduce incorrect company associations. Alias validity periods will account for company renames and other relevant changes.
+The complete project data extraction, audit trail, and supporting research reports are cataloged in [`docs/research_data_extraction/`](docs/research_data_extraction/):
 
-## 5. News Sentiment Analysis
-FinFusionNet investigates two complementary approaches to financial sentiment extraction.
+- [`00_MASTER_RESEARCH_REPORT.md`](docs/research_data_extraction/00_MASTER_RESEARCH_REPORT.md): Comprehensive executive research synthesis and academic paper drafting guide.
+- [`01_PROJECT_INVENTORY.csv`](docs/research_data_extraction/01_PROJECT_INVENTORY.csv): Full inventory of all 6,578 project files with metadata and research relevance.
+- [`02_DATASET_AND_FEATURES.md`](docs/research_data_extraction/02_DATASET_AND_FEATURES.md): Constituent specifications, news corpus, 15:30 IST cutoff logic, and 39-feature dictionary.
+- [`03_PREPROCESSING_AND_LEAKAGE_AUDIT.md`](docs/research_data_extraction/03_PREPROCESSING_AND_LEAKAGE_AUDIT.md): 10-point data leakage audit matrix.
+- [`04_EXPERIMENT_CONFIGURATIONS.md`](docs/research_data_extraction/04_EXPERIMENT_CONFIGURATIONS.md): Hyperparameters, architectures, and loss functions for Exp 1 through Exp 5.
+- [`05_ALL_EXPERIMENT_RESULTS.csv`](docs/research_data_extraction/05_ALL_EXPERIMENT_RESULTS.csv): Consolidated machine-readable table of audited metrics across all 19 model/benchmark configurations.
+- [`06_CLASSIFICATION_RESULTS.md`](docs/research_data_extraction/06_CLASSIFICATION_RESULTS.md): Detailed classification metrics, confusion matrices, and market regime analyses.
+- [`07_VOLATILITY_RESULTS.md`](docs/research_data_extraction/07_VOLATILITY_RESULTS.md): Parkinson volatility target formulation and like-for-like benchmark audit.
+- [`08_STATISTICAL_AUDIT.md`](docs/research_data_extraction/08_STATISTICAL_AUDIT.md): In-depth mathematical resolution of mandatory inconsistencies (A, B, C, D).
+- [`09_ARCHITECTURE_AND_MODEL_DETAILS.md`](docs/research_data_extraction/09_ARCHITECTURE_AND_MODEL_DETAILS.md): `CrossAttentionNet` PyTorch specifications, tensor shapes, and sentinel token equations.
+- [`10_FIGURE_INVENTORY.md`](docs/research_data_extraction/10_FIGURE_INVENTORY.md): Inventory of visual assets (1 PDF) and 7 required publication figure blueprints.
+- [`11_RESEARCH_TIMELINE.md`](docs/research_data_extraction/11_RESEARCH_TIMELINE.md): Reconstructed 6-phase research timeline.
+- [`12_CONTRADICTIONS_AND_MISSING_DATA.md`](docs/research_data_extraction/12_CONTRADICTIONS_AND_MISSING_DATA.md): Severity-ranked contradiction matrix (C1–C4) and project gaps.
+- [`13_SOURCE_FILE_REFERENCES.md`](docs/research_data_extraction/13_SOURCE_FILE_REFERENCES.md): Direct mapping of all pipelines, modules, predictions, and audit scripts.
 
-### VADER
-VADER is a lexicon-based sentiment analysis model. It provides a lightweight baseline for measuring positive, negative, and neutral language in news text.
+---
 
-### FinBERT
-FinBERT is a transformer-based model adapted for financial language. It estimates financial text sentiment across three categories:
-- Positive
-- Negative
-- Neutral
+## 6. Repository Structure
 
-### Sentiment aggregation
-Article-level sentiment is aggregated into ticker-day features. Planned features include:
-
-| Feature | Description |
-| :--- | :--- |
-| `n_articles` | Number of relevant articles |
-| `has_news` | Whether relevant news is available |
-| `vader_mean` | Average VADER compound sentiment |
-| `finbert_positive_mean` | Average positive probability |
-| `finbert_negative_mean` | Average negative probability |
-| `finbert_neutral_mean` | Average neutral probability |
-| `sentiment_dispersion` | Variation in article sentiment |
-
-Days without news are represented explicitly using `n_articles = 0` and `has_news = 0`. Missing sentiment values are not automatically treated as neutral sentiment.
-
-## 6. Feature Engineering
-
-### Technical indicators
-The technical feature pipeline is designed to capture several dimensions of market behaviour.
-
-| Category | Example indicators |
-| :--- | :--- |
-| **Trend** | SMA, EMA |
-| **Momentum** | RSI, MACD |
-| **Volatility** | Bollinger Bands, ATR |
-| **Returns** | Daily returns, rolling returns |
-| **Volume** | Volume change, volume moving averages |
-| **Price behaviour** | High-low range, close-open movement |
-
-All indicators must be calculated using information available at the relevant prediction time.
-
-### Feature fusion
-The research investigates combining:
-- Historical price-derived features.
-- Technical indicators.
-- VADER sentiment.
-- FinBERT sentiment.
-
-Sector information may be evaluated as an additional feature group after the core experiments are established.
-
-## 7. Prediction Target
-The initial prediction task is binary next-trading-day direction classification.
-
-The next-session return is defined as:
-$$R_{t+1} = \frac{\text{Close}_{t+1}}{\text{Close}_t} - 1$$
-
-The target variable is:
-$$Y_t = \begin{cases} 1 & \text{if } R_{t+1} > 0 \\ 0 & \text{otherwise} \end{cases}$$
-
-Where:
-- $\text{Close}_t$ is the closing price of the current trading session.
-- $\text{Close}_{t+1}$ is the closing price of the next trading session.
-- $Y_t = 1$ represents an upward move.
-- $Y_t = 0$ represents a non-positive move.
-
-The target is based on the next valid trading session, not simply the next calendar day.
-
-## 8. Model Development
-FinFusionNet uses modular model implementations so that each information source can be evaluated independently.
-
-- **XGBoost**: A gradient-boosted tree model used for structured technical and sentiment features.
-- **LSTM**: A recurrent neural network used to investigate temporal dependencies in historical financial sequences.
-- **FinFusionNet**: The proposed multi-modal model, designed to investigate the fusion of technical market information and financial news sentiment.
-
-The exact fusion mechanism and architecture will be documented alongside the implementation and experiments.
-
-### Controlled experiments
-The experimental design compares progressively richer feature configurations.
-
-| Experiment | Purpose |
-| :--- | :--- |
-| **E1** | Technical-feature baseline |
-| **E2** | Additional model or feature baseline, defined in experiment configuration |
-| **E3** | Technical features with VADER sentiment |
-| **E4** | Technical features with FinBERT sentiment |
-| **E5** | Multi-modal FinFusionNet fusion model |
-
-The precise model, feature set, and evaluation configuration for every experiment will be recorded in version-controlled configuration files. The experiment definitions must remain consistent across comparisons.
-
-## 9. Evaluation Methodology
-Financial time series require careful validation because randomly splitting observations can introduce temporal leakage. FinFusionNet therefore emphasizes chronological evaluation.
-
-### Walk-forward validation
-Models are trained on historical observations and evaluated on later unseen periods. The existing experimental baseline uses chronological train/test windows. Alternative expanding-window configurations will be evaluated separately rather than silently replacing the baseline.
-
-### Evaluation metrics
-The following metrics are planned:
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- ROC-AUC
-- Confusion matrix
-- Balanced accuracy
-- Directional prediction performance
-
-### Statistical evaluation
-Predictive improvements should not be judged using accuracy alone. The project includes statistical evaluation such as:
-- Binomial testing against a clearly specified baseline.
-- McNemar's test for paired classification comparisons.
-- Appropriate consideration of serial dependence and repeated testing.
-
-### Leakage prevention
-The evaluation pipeline will test for:
-- Future information entering technical features.
-- News published after the prediction cutoff entering current-session features.
-- Incorrect weekend and holiday alignment.
-- Train/test temporal overlap.
-- Incorrect historical index membership.
-- Target information entering model inputs.
-
-## 10. News and Market Time Alignment
-Correct timestamp alignment is essential for realistic financial prediction.
-
-The primary market reference is the NSE closing time of 15:30 Indian Standard Time. The pipeline converts news timestamps from UTC to Asia/Kolkata and maps each article to the appropriate valid trading session.
-
-The intended convention is:
-- News available by the prediction cutoff may contribute to that session's features.
-- News published after the cutoff is assigned to the next valid trading session.
-- Weekend and holiday news is assigned to the next valid trading session.
-- The prediction target remains the following valid trading session.
-
-The treatment of an article timestamped exactly at 15:30 will be explicitly defined and tested. A real trading calendar is used instead of assuming that the next calendar day is always a trading day.
-
-## 11. Repository Structure
-```text
+```
 FinFusionNet/
-│
-├── README.md
-├── LICENSE
-├── .gitignore
-├── .env.example
-├── requirements.txt
-├── pyproject.toml
-│
-├── configs/
-│   ├── dataset.yaml
-│   ├── universe.yaml
-│   ├── features.yaml
-│   ├── models.yaml
-│   └── evaluation.yaml
-│
-├── docs/
-│   ├── literature_review.md
-│   ├── dataset_design.md
-│   ├── methodology.md
-│   ├── experimental_design.md
-│   └── decision_log.md
-│
-├── metadata/
-│   └── india_domains.txt
-│
+├── configs/                             # Experiment configurations & hyperparameters
 ├── data/
-│   ├── raw/
-│   │   ├── prices/
-│   │   ├── gdelt/
-│   │   │   └── manifest.jsonl
-│   │   └── constituent_history/
-│   │
-│   ├── interim/
-│   │   ├── prices/
-│   │   ├── news/
-│   │   └── aligned_data/
-│   │
-│   ├── processed/
-│   │   ├── ticker_day/
-│   │   ├── master_dataset/
-│   │   └── model_ready/
-│   │
-│   └── metadata/
-│       ├── universe.csv
-│       ├── sectors.csv
-│       ├── aliases.csv
-│       └── trading_calendar.csv
-│
-├── src/
-│   └── finfusionnet/
-│       ├── __init__.py
-│       │
-│       ├── data/
-│       │   ├── universe.py
-│       │   ├── prices.py
-│       │   ├── gdelt.py
-│       │   ├── news_cleaner.py
-│       │   ├── trading_calendar.py
-│       │   └── validation.py
-│       │
-│       ├── features/
-│       │   ├── technical.py
-│       │   ├── sentiment.py
-│       │   ├── aggregation.py
-│       │   └── targets.py
-│       │
-│       ├── models/
-│       │   ├── xgboost_model.py
-│       │   ├── lstm_model.py
-│       │   └── finfusionnet.py
-│       │
-│       ├── evaluation/
-│       │   ├── walk_forward.py
-│       │   ├── metrics.py
-│       │   ├── stats_tests.py
-│       │   ├── backtesting.py
-│       │   └── reports.py
-│       │
-│       └── utils/
-│           ├── logging.py
-│           ├── reproducibility.py
-│           └── paths.py
-│
-├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_price_analysis.ipynb
-│   ├── 03_news_analysis.ipynb
-│   ├── 04_feature_analysis.ipynb
-│   └── 05_model_experiments.ipynb
-│
-├── scripts/
-│   ├── fetch_prices.py
-│   ├── validate_universe.py
-│   ├── extract_gdelt.py
-│   ├── build_features.py
-│   ├── train.py
-│   └── evaluate.py
-│
+│   ├── raw/                             # Historical prices & raw scraped news chunks
+│   ├── processed/                       # Master feature datasets & cleaned news corpus
+│   └── interim/                         # Ticker-day sentiment aggregations
+├── docs/
+│   ├── audit/                           # Historical experiment audits & statistical logs
+│   │   └── exp1_exp5_statistical_audit/ # Independent statistical audit CSVs & scripts
+│   └── research_data_extraction/        # Master extraction deliverables (00 through 13)
 ├── experiments/
-│   └── runs/
-│       └── .gitkeep
-│
-├── artifacts/
-│   └── final/
-│
-├── reports/
-│   ├── data_quality/
-│   ├── statistical_tests/
-│   └── final_results/
-│
-└── tests/
-    ├── test_universe.py
-    ├── test_prices.py
-    ├── test_gdelt.py
-    ├── test_features.py
-    ├── test_no_leakage.py
-    ├── test_walk_forward.py
-    └── test_stats_tests.py
+│   ├── audit/                           # Exp 1 price-only fold predictions
+│   ├── experiment_3/                    # Exp 3 VADER 10-stock pilot
+│   ├── experiment_3b/                   # Exp 3B VADER All-50 predictions
+│   ├── experiment_4/                    # Exp 4 FinBERT early concatenation
+│   └── experiment_5/                    # Exp 5 Temporal Cross-Attention
+├── notebooks/                           # Exploratory data analysis notebooks
+├── scripts/                             # CLI execution scripts for training & audit
+├── src/
+│   └── finfusionnet/                    # Core production Python package
+│       ├── data/                        # Ingestion & sequence generators
+│       ├── evaluation/                  # Stats tests (DM, Bootstrap, McNemar)
+│       ├── features/                    # Technical, context & sentiment features
+│       └── models/                      # LSTM, XGBoost, and CrossAttentionNet
+├── tests/                               # Comprehensive unit and integration test suite
+└── README.md                            # Project documentation and audit summary
 ```
 
-## 12. Reproducibility
-Every experiment should record:
-- Experiment ID and timestamp.
-- Configuration snapshot.
-- Git commit hash.
-- Dataset version or hash.
-- Random seed.
-- Software and dependency versions.
-- Training and testing periods.
-- Model parameters.
-- Predictions and evaluation metrics.
+---
 
-Each experiment receives its own run directory:
-```text
-experiments/
-└── runs/
-    └── e3_technical_vader/
-        └── 2026-10-16_120000/
-            ├── config.yaml
-            ├── metrics.json
-            ├── predictions.csv
-            └── run_metadata.json
-```
+## 7. Quickstart & Verification
 
-Final trained models are stored separately under `artifacts/final/`.
-Raw and processed datasets are not committed to Git unless they are small, redistributable, and explicitly intended for version control.
-
-## 13. Installation
-
-### Requirements
-- Python 3.10 or higher
-- Git
-- Internet connection for data extraction
-- Sufficient disk space for historical data
-- Optional Google Cloud BigQuery access for GDELT extraction
-
-### Clone the repository
+### Installation
 ```bash
 git clone https://github.com/neil-data/FinFusionNet.git
 cd FinFusionNet
+pip install -e .
 ```
 
-### Create a virtual environment
-
-**Windows:**
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-```
-
-**Linux / macOS:**
+### Run Full Test Suite
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+pytest tests/
 ```
 
-### Install dependencies
+### Reproduce Statistical Audit & Cohort Parity
 ```bash
-pip install --upgrade pip
-pip install -r requirements.txt
+python docs/audit/exp1_exp5_statistical_audit/audit_exp1_exp5.py
 ```
 
-### Configure environment variables
-```bash
-copy .env.example .env
+---
+
+## 8. License & Academic Citation
+
+This project is licensed under the MIT License. If you use FinFusionNet code, datasets, or audit methodologies in your academic research, please cite:
+
+```bibtex
+@misc{finfusionnet2026,
+  author = {Neil},
+  title = {FinFusionNet: Multimodal Financial Machine Learning and Temporal Cross-Attention Framework},
+  year = {2026},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/neil-data/FinFusionNet}}
+}
 ```
-Add any required credentials locally. Never commit API keys, service-account credentials, or other secrets.
-
-## 14. Development Roadmap
-
-| Phase | Work | Status |
-| :---: | :--- | :---: |
-| **1** | Project architecture and research design | In progress |
-| **2** | Historical universe and metadata validation | Planned |
-| **3** | Historical price extraction and validation | Planned |
-| **4** | GDELT historical news extraction | Planned |
-| **5** | News cleaning and company entity matching | Planned |
-| **6** | Sentiment extraction and ticker-day aggregation | Planned |
-| **7** | Technical feature engineering | Planned |
-| **8** | Master dataset construction | Planned |
-| **9** | Baseline XGBoost and LSTM experiments | Planned |
-| **10** | FinFusionNet fusion architecture | Planned |
-| **11** | Walk-forward and statistical evaluation | Planned |
-| **12** | Final research analysis and documentation | Planned |
-
-Project status should be updated as each phase is implemented and validated.
-
-## 15. Research Limitations
-FinFusionNet is an experimental research framework. Its results may be affected by:
-- Incomplete or inaccurate historical news coverage.
-- Incorrect company-name matching.
-- Corporate actions and historical ticker changes.
-- Survivorship bias in constituent selection.
-- Market regime changes.
-- Data-source limitations.
-- Class imbalance and noisy market labels.
-- Transaction costs and execution assumptions.
-- Temporal dependence in financial observations.
-
-Predictive performance in historical data does not guarantee future performance.
-
-## 16. Future Scope
-Potential extensions include:
-- More advanced multimodal fusion architectures.
-- Company-level event detection.
-- Sector-level sentiment analysis.
-- Additional financial news sources.
-- Explainable AI for financial predictions.
-- Probability calibration and uncertainty estimation.
-- Transaction-cost-aware backtesting.
-- Broader Indian equity market coverage.
-
-These extensions will be considered after the core experimental framework has been validated.
-
-## 17. Disclaimer
-FinFusionNet is developed strictly for educational, analytical, and research purposes.
-It does not provide financial advice, investment recommendations, or guaranteed market predictions.
-Financial markets involve risk. Users should not make investment decisions solely on the basis of this project's outputs.
-
-## 18. Author
-**Neil**  
-B.Tech Computer Engineering | Data Science & Machine Learning  
-GitHub: [@neil-data](https://github.com/neil-data)
-
-<p align="center">
-  <strong>FinFusionNet — Researching the intersection of financial markets, machine learning, and news intelligence.</strong>
-</p>

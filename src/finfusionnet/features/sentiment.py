@@ -25,6 +25,8 @@ SENTIMENT_FEATURE_COLS = [
     "finbert_positive_mean",
     "finbert_negative_mean",
     "finbert_neutral_mean",
+    "finbert_sentiment_score",
+    "finbert_mean",
     "finbert_dispersion",
     "finbert_confidence",
 ]
