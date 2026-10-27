@@ -27,6 +27,10 @@ Despite enthusiastic claims in the recent academic and pre-print literature, emp
 4. **Benchmark Asymmetry**: Comparing sophisticated neural estimators against misaligned or unfairly parameterized baselines.
 5. **Distribution Distortions in Missing Data**: Artificially imputing days with no news as "neutral sentiment," corrupting the true conditional probability distribution of news arrival.
 
+
+![Figure 1: End-to-End FinFusionNet Research Architecture and Audit Methodology](figures/methodology.png)
+*Figure 1: End-to-End FinFusionNet Research Architecture and Audit Methodology, illustrating multi-stream causal ingestion, Protocol B expanding walk-forward engine, dual-task CrossAttentionNet architecture, and audited hypothesis testing suite.*
+
 ### Research Objectives and Contributions
 In this study, we present **FinFusionNet**, an end-to-end multimodal deep learning and quantitative evaluation framework specifically engineered to address these methodological challenges in the Indian equity market (National Stock Exchange Nifty 50 index universe). We develop a dual-head temporal cross-attention architecture (`CrossAttentionNet`) combining historical price sequences with sparse daily FinBERT news representations, evaluated via a rigorous expanding-window walk-forward protocol (**Protocol B**, 45 expanding monthly folds, 24-month initial warm-up, 1-session embargo).
 
@@ -87,6 +91,10 @@ Session t-1 Close          Session t Close          Session t+1 Close
                                  | Predicts: Direction & Volatility of t+1
 ```
 
+
+![Figure 2: 15:30 IST Causal Information Boundary and News Window Temporal Alignment](figures/temporal_alignment.png)
+*Figure 2: The 15:30 IST Causal Information Boundary. Any news article published during trading hours up to 15:30 IST is assigned to the current session's feature basket $\mathcal{W}_t$. Articles published post-15:30 are strictly shifted to session $t+1$ to eliminate lookahead bias.*
+
 ### 3.4 Missing-News Representation
 In large-cap equities, company-specific news arrives intermittently. Across the audited evaluation cohort, **31,458 ticker-days (69.70%)** possess news coverage, while **13,678 ticker-days (30.30%)** have zero articles. 
 
@@ -134,6 +142,10 @@ The 39 predictive features are partitioned into four distinct categories:
 4. **Sentiment Features (8 FinBERT / 5 VADER Features)**:
    - *VADER*: Mean compound score, positive score, negative score, neutral score, and compound dispersion.
    - *FinBERT*: Mean positive softmax probability, negative probability, neutral probability, directional sentiment score ($P(\text{pos}) - P(\text{neg})$), article-level standard deviation (dispersion), and mean confidence ($\max(P)$).
+
+
+![Figure 5: Empirical News Arrival Sparsity and FinBERT Sentiment Distribution](figures/news_distribution.png)
+*Figure 5: Empirical News Dynamics in the Common Evaluation Cohort. Panel A shows news coverage sparsity across the 45,136 ticker-day observations (72.5% active news days, 27.5% missing-news days). Panel B displays the empirical distribution of daily FinBERT sentiment scores ($P(\text{pos}) - P(\text{neg})$) on active news days, centered near zero with standard deviation 0.3817.*
 
 ### 4.2 Target Formulations
 
@@ -222,6 +234,10 @@ The representation is branched into two dedicated multi-layer perceptron (MLP) p
 $$\mathcal{L}_{total} = \mathcal{L}_{dir} + \lambda \cdot \mathcal{L}_{vol}, \quad \lambda = 1.0$$
 The model has **266,626 trainable parameters** and is trained using AdamW ($lr = 5 \times 10^{-4}$, weight decay $= 10^{-3}$) with cosine learning rate annealing over 25 epochs.
 
+
+![Figure 3: CrossAttentionNet Dual-Head Multimodal Architecture](figures/architecture.png)
+*Figure 3: Detailed neural network schematic of CrossAttentionNet, highlighting the 2-layer BiLSTM price encoder, linear news projection, multi-head temporal cross-attention with sentinel token masking, temporal fusion pooling, and dual prediction heads.*
+
 ### 5.2 Baseline Architectures
 
 1. **Price-Only LSTM Baseline (`LSTM-F0`)**: A 2-layer LSTM with 64 hidden units accepting the 24 price features ($D=24$). Fully connected head ($64 \to 32 \to 1$). Loss: Binary Cross-Entropy. Optimizer: Adam ($lr = 10^{-3}$).
@@ -250,6 +266,10 @@ Fold 2:  [ Train: 2021-01 to 2023-01 ]-[Embargo]-[ Test: 2023-02 ]
 ...
 Fold 45: [ Train: 2021-01 to 2026-08 ]-[Embargo]-[ Test: 2026-09 ]
 ```
+
+
+![Figure 4: Protocol B Walk-Forward Expanding Validation Engine](figures/walk_forward_protocol.png)
+*Figure 4: Protocol B Expanding Walk-Forward Validation Engine. Displaying the expanding training windows (from 24 to 68 months), the 1-session embargo gap, and the 45 monthly out-of-sample evaluation test folds spanning January 2023 through September 2026.*
 
 ### 6.2 Statistical Testing Suite
 1. **Paired Date-Block Bootstrap**: To account for cross-sectional and temporal dependence across stocks on the same date, we implement a paired date-block bootstrap ($B = 10,000$ resamples, block length $L = 10$ trading dates). Two-sided 95% confidence intervals and empirical p-values are computed for accuracy differentials.
@@ -287,6 +307,10 @@ Table 1 presents the out-of-sample direction classification metrics across all m
 2. **Absence of Multimodal Alpha Lift**: Early concatenation of FinBERT features degraded LSTM date accuracy from 51.08% to 50.53% ($\Delta = -0.55\%$). The complex `CrossAttentionNet` achieved 50.16% date accuracy, trailing even the naive Always-Up baseline (50.34%).
 3. **Pervasive Bull Market Bias**: Many models defaulted to predicting positive market direction. XGB-F0 predicted UP 93.55% of the time, effectively mimicking the Always-Up baseline, while Cross-Attention Net predicted UP 68.56% of the time.
 
+
+![Figure 6: Direction Classification Performance and Probability Calibration Contrast](figures/classification_results.png)
+*Figure 6: Out-of-Sample Direction Classification Benchmark. Panel A presents date-level direction accuracy with 95% date-block bootstrap confidence intervals across all evaluated models and baselines. Panel B displays the ROC-AUC versus Brier Score scatter, illustrating that Cross-Attention Net achieves well-calibrated probabilities via base-rate shrinkage without achieving directional timing superiority.*
+
 ### 7.2 Volatility Regression Results
 
 Table 2 presents out-of-sample volatility forecasting performance against historical benchmarks.
@@ -306,6 +330,10 @@ Table 2 presents out-of-sample volatility forecasting performance against histor
 #### Resolution of the Benchmark Asymmetry:
 When compared against the historical `volatility_20` baseline (close-to-close returns), Cross-Attention Net appeared to deliver an impressive RMSE reduction from 0.1322 to 0.1075 (+18.7% absolute error reduction, reported as "+44.8% variance reduction"). However, our audit revealed that `volatility_20` has an intrinsic $+0.0331$ bias over Parkinson volatility due to overnight gap variance. When evaluated against the fair **Trailing Parkinson 20d benchmark (`parkinson_20`)**, the simple benchmark outperforms the neural network on RMSE (0.1052 vs 0.1075), correlation ($r = 0.3979$ vs $0.3369$), and $R^2$ (+14.24% vs +10.38%). Cross-Attention Net only marginally edges MAE (0.0686 vs 0.0695) because it was trained using Smooth L1 (Huber) loss.
 
+
+![Figure 7: Volatility Benchmarking and Overnight Jump Bias Resolution](figures/volatility_results.png)
+*Figure 7: Volatility Benchmarking and Asymmetry Resolution. Panel A illustrates the sample means of the true Parkinson high-low target (0.2024) versus trailing close-to-close volatility (0.2355), demonstrating the $+0.0331$ (+16.3%) overnight gap bias. Panel B evaluates RMSE and out-of-sample $R^2$ across fair Parkinson benchmarks (`parkinson_20`, `parkinson_10`, `parkinson_5`) versus Cross-Attention Net.*
+
 ### 7.3 Market Regime & Subgroup Analysis
 
 Table 3 evaluates model performance across distinct market volatility quartiles and market directional regimes.
@@ -324,6 +352,10 @@ All models suffer severe degradation in high-volatility regimes, dropping below 
 
 ---
 
+
+![Figure 9: Model Direction Accuracy Across Market Volatility and Directional Regimes](figures/regime_analysis.png)
+*Figure 9: Model Fragility Across Market Regimes. Date-level direction accuracy across High Volatility (top 25%), Normal Volatility (middle 50%), Low Volatility (bottom 25%), Bull Sessions (index return $> 0$), and Bear Sessions (index return $< 0$). All models suffer severe degradation in high-volatility environments.*
+
 ## 8. Statistical Audit and Significance Analysis
 
 Table 4 details the statistical hypothesis tests comparing candidate architectures against baselines.
@@ -340,6 +372,10 @@ Table 4 details the statistical hypothesis tests comparing candidate architectur
 | **LSTM-FinBERT vs LSTM-F0** | -0.0055 | [-0.0117, -0.0002] | 0.9800 | 385 vs 418 (Ties 113)| 0.2588 | -1.8802 | 0.0604 | -1.7991 | 0.0723 | 0.9800 | **False** |
 | **XGB-FinBERT vs XGB-F0** | +0.0015 | [-0.0116, +0.0129] | 0.4595 | 440 vs 439 (Ties 37) | 1.0000 | -12.4165 | $< 10^{-15}$ | +0.2336 | 0.8153 | 1.0000 | **False** |
 | **LR-FinBERT vs LR-F0** | +0.0001 | [-0.0034, +0.0030] | 0.5445 | 371 vs 388 (Ties 157)| 0.5614 | -0.3954 | 0.6926 | +0.0679 | 0.9459 | 1.0000 | **False** |
+
+
+![Figure 8: Diebold-Mariano Test Statistics and Significance Forest Plot](figures/statistical_results.png)
+*Figure 8: Forest Plot of Date-Level Diebold–Mariano Test Statistics for 0–1 Classification Loss across planned pairwise comparisons. Dashed lines indicate the 5% two-sided significance boundaries ($DM = \pm 1.96$). LSTM-F0 significantly outperforms Cross-Attention Net ($DM = -2.125, p = 0.0339$). Under family-wise Holm–Bonferroni correction, no sentiment model demonstrates positive alpha.*
 
 ### 8.1 Resolution of Inconsistencies A, B, and C
 
